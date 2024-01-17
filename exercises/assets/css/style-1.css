@@ -21,6 +21,8 @@ input, button, textarea, select { font: inherit }
     body { padding: 8% 5% }
  }
 
+ body { background-color: antiquewhite; }
+
 h1 {
     font-size: 84px;
     text-align: center;
@@ -32,6 +34,7 @@ h1 {
 h2 {
     font-size: 36px;
     margin-bottom: 4px;
+    color: brown;
 }
 
 h3 {
@@ -45,3 +48,5 @@ p {
     line-height: 1.6;
     margin-bottom: 20px;
 }
+
+a { color: brown; }

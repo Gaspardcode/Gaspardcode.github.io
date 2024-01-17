@@ -11,6 +11,17 @@ input, button, textarea, select { font: inherit }
 
 /* ================= ENDS ================ */
 
+:root{
+    --font-size-sm: clamp(0.8rem, 0.17vw + 0.76rem, 0.89rem);
+--font-size-base: clamp(1rem, 0.34vw + 0.91rem, 1.19rem);
+--font-size-md: clamp(1.25rem, 0.61vw + 1.1rem, 1.58rem);
+--font-size-lg: clamp(1.56rem, 1vw + 1.31rem, 2.11rem);
+--font-size-xl: clamp(1.95rem, 1.56vw + 1.56rem, 2.81rem);
+--font-size-xxl: clamp(2.44rem, 2.38vw + 1.85rem, 3.75rem);
+--font-size-xxxl: clamp(3.05rem, 3.54vw + 2.17rem, 5rem);
+}
+
+
 /* Desktops */
 @media (min-width: 768px) {
     body { padding: 4% 20% }
@@ -24,22 +35,24 @@ input, button, textarea, select { font: inherit }
 body {
     text-align: center;
     font-family: sans-serif;
-    background-image: url("hamster.jpeg");
+    background-image: url("../img/hamster.jpeg");
     background-repeat: no-repeat;
     background-attachment: fixed;
     background-size: 100% 100%;
+    padding: 4% 20%;
 }
 
-h1 {
-    font-size: 78px;
+h1 {  
+    font-size: var(--font-size-xxxl);
     font-weight: normal;
-    letter-spacing: -2px;
+    letter-spacing: -3px;
     margin-bottom: 12px;
     line-height: 1.2;
+    font-family: sans-serif
 }
 
 h2 {
-    font-size: 42px;
+    font-size: var(--font-size-xl);
     letter-spacing: 6px;
     margin-bottom: 48px;
     line-height: 1.2;
@@ -58,3 +71,22 @@ p {
     margin-bottom: 16px;
 }
 
+a { color: darkblue; }
+
+.flexbox{
+    display:flex;
+    justify-content:space-between;
+    background-color: transparent;
+    border: 4px solid transparent;
+}
+.box1, .box2 {
+    margin-bottom: 42px;
+    width: 40%;
+}
+
+div {
+    background-color:aqua;
+    padding: 16px;
+    border:4px solid black;
+    margin: 12px;
+}

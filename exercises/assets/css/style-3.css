@@ -8,6 +8,7 @@ body { line-height: 1.5; min-height: 100vh }
 @media (min-width: 768px ) { body { text-rendering: optimizeLegibility } }
 img { width: 100%; height: auto; display: block }
 input, button, textarea, select { font: inherit }
+body { background-color: lightblue; }
 
 /* Desktops */
 @media (min-width: 768px) {
@@ -22,6 +23,7 @@ input, button, textarea, select { font: inherit }
 h2 {
     font-size: 56px;
     margin-bottom: 4px;
+    color: blue;
 }
 
 h3 {
@@ -32,4 +34,40 @@ h3 {
 p {
     font-size: 20px;
     margin-bottom: 16px
+}
+
+a {color:blue;}
+
+.section-1 {
+    background-color: lemonchiffon;
+}
+
+.section-2 {
+    background-color: lightgreen;
+}
+
+.section-3 {
+    background-color: lightblue;
+}
+
+.section-4 {
+    background-color: darkblue;
+}
+
+.section-4 h2,
+.section-4 p {
+    color:#fff;
+}
+
+.section-5 {
+    background-color: lightcoral;
+}
+
+.section-6 {
+    background-color: darkred;
+}
+
+.section-6 h2,
+.section-6 p {
+    color:  #fff;
 }

@@ -1,12 +1,130 @@
 
-nav.theme-dark, nav.theme-dark ul.links-wrapper.active { background-color:   #7FC7D9}
+nav.theme-dark, nav.theme-dark ul.links-wrapper.active { background: linear-gradient(to right,#365486,#0F1035);  }
 
-header.theme-dark   { background-color:#52D3D8;}
+header.theme-dark   { background:linear-gradient(to left,#0fdae1,#aee2ef);}
 
 header.theme-dark  h1 { color: black; }
 
 section.theme-dark   { background-color: #365486 }
 
-footer.theme-dark   { background-color: #0F1035  }
+footer.theme-dark   { background: linear-gradient(to right,#365486,#0F1035);  }
 
 header .col-text h2, .col-1 > h3 { line-height: 1.8 }
+
+header.theme-dark .badge {
+background-color: #0fdae1;
+}
+section-selector-1 {
+    background-color: (to right,#365486,#0F1035);
+}
+
+body {
+    font-family: 'Anonymous Pro', monospace;
+}
+.logo {
+    width:100px;
+    height:auto;
+}
+
+.default {
+    cursor: default;
+    color: black;
+  }
+  
+  .pointer {
+    cursor: pointer;
+    color: black;
+  }
+  
+  .help {
+    cursor: help;
+    color: white;
+  }
+
+  .custom {
+    left: var(--x);
+    top: var(--y);
+    width: var(--size);
+    height: var(--size);
+    background: radial-gradient(circle closest-side, pink, transparent);
+}
+
+.cursor {
+    position: absolute;
+    width: 20px;
+    height: 20px;
+    background-color: red;
+    border-radius: 50%;
+  }
+  
+  .progress {
+    cursor: progress;
+    color: white;
+  }
+  
+  .wait {
+    cursor: wait;
+    color: white;
+  }
+  
+  .cell {
+    cursor: cell;
+    color: gray;
+  }
+  
+  .crosshair {
+    cursor: crosshair;
+    color: white;
+  }
+  
+  .text {
+    cursor: text;
+    color: white;
+  }
+  
+  .vertical-text {
+    cursor: vertical-text;
+    color: #848787;
+  }
+  
+  .alias {
+    cursor: alias;
+    color: white;
+  }
+  
+  .grab {
+    cursor: grab;
+    color: white;
+  }
+  
+  .grabbing {
+    cursor: grabbing;
+    color: white;
+  }
+  
+  .not-allowed {
+    cursor: not-allowed;
+    color: white;
+  }
+  
+  .zoom-in {
+    cursor: zoom-in;
+    color: white;
+  }
+  
+  .zoom-out {
+    cursor: zoom-out;
+    color: white;
+  }
+  
+  .all-scroll {
+    cursor: all-scroll;
+    color: white;
+  }
+  
+  .big {
+    font-size: 2rem;
+  }
+/*
+  #playpen { background: rgb(155,155,155); text-align: center; height: 200px; line-height: 200px; }
+  */

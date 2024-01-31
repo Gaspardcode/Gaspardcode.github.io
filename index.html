@@ -1,13 +1,23 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    <!--Cookie consent -->
+    <script src="https://cmp.osano.com/Azz4gpU2qxsTf3EOl/4954fe60-c5f0-449f-b194-968a048b4dab/osano.js"></script>
+
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Gaspard TORTERAT | Web Designer and Developer</title>
+    <title>Gaspard TORTERAT | Web Designer and Developer | Student in computer science | EPITA</title>
     <meta name="description" content="I create digital experiences to promote products, services, and events.">
 
 	<!-- Preload large image -->
+    <link rel="preload" href="assets/img/h-no-bg.png" as="image">
+    
+    <!--Favicon-->
+    <link rel="apple-touch-icon" sizes="180x180" href="assets/img/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="assets/img/favi-32-no-bg.png">
+    <link rel="manifest" href="assets/img/site.webmanifest">
+
 
 	<!-- Stylesheets -->
     <link rel="stylesheet" href="https://lunevedy.com/assets/2.0/css/lunevedy.min.css" />
@@ -15,6 +25,10 @@
     <link rel="stylesheet" href="https://colorhunt.co/palette/dcf2f17fc7d93654860f1035" />
 
 	<!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Anonymous+Pro:ital,wght@0,400;0,700;1,400;1,700&display=swap" rel="stylesheet">
+
 
     <!-- Font Awesome 6 icons. Delete if not using. -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" integrity="sha512-9usAa10IRO0HhonpyAIVpjrylPvoDwiPUiKdWk5t3PyolY1cOd4DSE0Ga+ri4AuTroPR5aQvXU9xC6qOPnzFeg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
@@ -24,17 +38,91 @@
         .col-1 > h3 { line-height: 1.8 } 
     </style>
 
-<link rel="preload" href="assets/img/h-no-bg.png" as="image">
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-L739GS6HS6"></script>
+    <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+
+    gtag('config', 'G-L739GS6HS6');
+    </script>
+<!--
+<script>
+    // DOM Ready
+    $(function() {
+
+        var originalBGplaypen = $("#playpen").css("background-color"),
+            x, y, xy, bgWebKit, bgMoz,
+            lightColor = "rgba(255,255,255,0.75)",
+            gradientSize = 100;
+
+            // Basic Demo
+            $('#playpen').mousemove(function(e) {
+
+                x  = e.pageX - this.offsetLeft;
+                y  = e.pageY - this.offsetTop;
+                xy = x + " " + y;
+
+                bgWebKit = "-webkit-gradient(radial, " + xy + ", 0, " + xy + ", " + gradientSize + ", from(" + lightColor + "), to(rgba(255,255,255,0.0))), " + originalBGplaypen;
+                bgMoz    = "-moz-radial-gradient(" + x + "px " + y + "px 45deg, circle, " + lightColor + " 0%, " + originalBGplaypen + " " + gradientSize + "px)";
+
+                $(this)
+                    .css({ background: bgWebKit })
+                    .css({ background: bgMoz });
+
+            }).mouseleave(function() {
+                $(this).css({ background: originalBGplaypen });
+            });
+
+            var originalBG = $(".nav a").css("background-color");
+
+            $('.nav li:not(".active") a')
+            .mousemove(function(e) {
+
+                   x  = e.pageX - this.offsetLeft;
+                   y  = e.pageY - this.offsetTop;
+                   xy = x + " " + y;
+
+                   bgWebKit = "-webkit-gradient(radial, " + xy + ", 0, " + xy + ", 100, from(rgba(255,255,255,0.8)), to(rgba(255,255,255,0.0))), " + originalBG;
+                   bgMoz    = "-moz-radial-gradient(" + x + "px " + y + "px 45deg, circle, " + lightColor + " 0%, " + originalBG + " " + gradientSize + "px)";
+
+                    $(this)
+                        .css({ background: bgWebKit })
+                        .css({ background: bgMoz });
+
+
+            }).mouseleave(function() {
+                $(this).css({ background: originalBG });
+            });
+
+    });
+</script>
+-->
+<script>
+    const cursor = document.getElementById('cursor');
+
+    document.addEventListener('mousemove', (e) => {
+      // Update CSS based on mouse coordinates
+      const mouseX = e.clientX;
+      const mouseY = e.clientY;
+
+      cursor.style.left = mouseX + 'px';
+      cursor.style.top = mouseY + 'px';
+    });
+  </script>
 
 </head>
 
 
 <body>
 
+    <div id="cursor"></div>
+
     <!-- menu and 'hero block' header -->
     <nav class="theme-dark"><div class="container-menu">
         <a href="#" class="brand">
-            <img src="assets/img/website-logo-sample.png" alt="Sample website logo">
+            <img class ="logo" src="assets/img/logo.png" width="400" height="400" alt="Sample website logo">
         </a>
     
         <div class="container-menu-links">
@@ -55,15 +143,15 @@
     
            <!-- header starts here -->
     
-        <header class="theme-dark cols-2-half text-center-mobile">
+        <header class="theme-dark cols-2-half text-center-mobile custom">
     
             <div class="col-2 col-text">
-                <div class="badge">WELCOME</div>
-                <h1>Gaspard TORTERAT</h1>
+                <div class="badge not-allowed">ПРИЁМ</div>
+                <h1><i>&lt;/&gt; Gaspard TORTERAT</i></h1>
                 <h2>I am an innovative front-end developer who loves to build human-friendly interfaces.</h2>
     
                 <div class="container-btn">
-                    <a href="portfolio/index.html" class="btn btn-solid btn-soft"><span>View my work</span><i class="fa-regular fa-folder-open"></i></a><a href="contact/index.html" class="btn btn-outline btn-soft"><span>Get in touch</span><i class="fa-regular fa-envelope"></i></a>
+                    <a href="portfolio/index.html" class="btn btn-solid btn-soft"><span class="pointer">View my work</span><i class="fa-regular fa-folder-open"></i></a><a href="contact/index.html" class="btn btn-outline btn-soft"><span>Get in touch</span><i class="fa-regular fa-envelope"></i></a>
                 </div>
     
             </div>
@@ -84,11 +172,11 @@
 
 	<!-- section starts here -->
 
-    <section class="theme-dark section-selector-1 w-1356px">
+    <section class="theme-dark section-selector-1 w-1356px custom">
 
 		<div class="col-1 text-center w-820px">
 			<h2>Recent projects</h2>
-			<h3>Below you can see some examples of my recent work. Check out my complete portfolio of <a href="portfolio/index.html">web design</a> projects. Have a project you would like to discuss? <a href="contact/index.html">Let's make something great together!</a> </h3>
+			<h3>Below you can see some examples of my recent work. Check out my complete portfolio of <a href="portfolio/index.html" class="help">web design</a> projects. Have a project you would like to discuss? <a href="contact/index.html" class="help">Let's make something great together!</a> </h3>
 		</div>
 
 		<!-- Begin three-column flexbox grid -->

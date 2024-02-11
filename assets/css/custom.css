@@ -125,6 +125,165 @@ body {
   .big {
     font-size: 2rem;
   }
-/*
-  #playpen { background: rgb(155,155,155); text-align: center; height: 200px; line-height: 200px; }
-  */
+
+
+
+main  .a {
+    text-decoration: none;
+    color: #18272F;
+    font-weight: 700;
+    position: relative;
+  }
+  
+ main .a::before {
+    content: '';
+    background-color: hsla(196, 61%, 58%, .75);
+    position: absolute;
+    left: 0;
+    bottom: 3px;
+    width: 100%;
+    height: 8px;
+    z-index: -1;
+    transition: all .3s ease-in-out;
+  }
+  
+  a:hover::before {
+    bottom: 0;
+    height: 100%;
+  }
+    
+/**
+ * ----------------------------------------
+ * animation shadow-pop-bl
+ * ----------------------------------------
+ */
+
+ .shadow-pop-bl {
+	-webkit-animation: shadow-pop-bl 1s cubic-bezier(0.250, 0.460, 0.450, 0.940) forwards;
+	        animation: shadow-pop-bl 1s cubic-bezier(0.250, 0.460, 0.450, 0.940) forwards;
+          background-color: #0fdae1;
+}
+@-webkit-keyframes shadow-pop-bl {
+  0% {
+    -webkit-box-shadow: 0 0 #3e3e3e, 0 0 #3e3e3e, 0 0 #3e3e3e, 0 0 #3e3e3e, 0 0 #3e3e3e, 0 0 #3e3e3e, 0 0 #3e3e3e, 0 0 #3e3e3e;
+            box-shadow: 0 0 #3e3e3e, 0 0 #3e3e3e, 0 0 #3e3e3e, 0 0 #3e3e3e, 0 0 #3e3e3e, 0 0 #3e3e3e, 0 0 #3e3e3e, 0 0 #3e3e3e;
+    -webkit-transform: translateX(0) translateY(0);
+            transform: translateX(0) translateY(0);
+  }
+  100% {
+    -webkit-box-shadow: -1px 1px #3e3e3e, -2px 2px #3e3e3e, -3px 3px #3e3e3e, -4px 4px #3e3e3e, -5px 5px #3e3e3e, -6px 6px #3e3e3e, -7px 7px #3e3e3e, -8px 8px #3e3e3e;
+            box-shadow: -1px 1px #3e3e3e, -2px 2px #3e3e3e, -3px 3px #3e3e3e, -4px 4px #3e3e3e, -5px 5px #3e3e3e, -6px 6px #3e3e3e, -7px 7px #3e3e3e, -8px 8px #3e3e3e;
+    -webkit-transform: translateX(8px) translateY(-8px);
+            transform: translateX(8px) translateY(-8px);
+  }
+}
+@keyframes shadow-pop-bl {
+  0% {
+    -webkit-box-shadow: 0 0 #3e3e3e, 0 0 #3e3e3e, 0 0 #3e3e3e, 0 0 #3e3e3e, 0 0 #3e3e3e, 0 0 #3e3e3e, 0 0 #3e3e3e, 0 0 #3e3e3e;
+            box-shadow: 0 0 #3e3e3e, 0 0 #3e3e3e, 0 0 #3e3e3e, 0 0 #3e3e3e, 0 0 #3e3e3e, 0 0 #3e3e3e, 0 0 #3e3e3e, 0 0 #3e3e3e;
+    -webkit-transform: translateX(0) translateY(0);
+            transform: translateX(0) translateY(0);
+  }
+  100% {
+    -webkit-box-shadow: -1px 1px #3e3e3e, -2px 2px #3e3e3e, -3px 3px #3e3e3e, -4px 4px #3e3e3e, -5px 5px #3e3e3e, -6px 6px #3e3e3e, -7px 7px #3e3e3e, -8px 8px #3e3e3e;
+            box-shadow: -1px 1px #3e3e3e, -2px 2px #3e3e3e, -3px 3px #3e3e3e, -4px 4px #3e3e3e, -5px 5px #3e3e3e, -6px 6px #3e3e3e, -7px 7px #3e3e3e, -8px 8px #3e3e3e;
+    -webkit-transform: translateX(8px) translateY(-8px);
+            transform: translateX(8px) translateY(-8px);
+  }
+}
+
+.section-selector-1.theme-light .cols-shadows .col-4 { box-shadow: rgba(0, 0, 0, 0.2) 7px 7px 7px 0px}
+.section-selector-4.theme-dark { background:linear-gradient(to right,#0fdae1,#aee2ef); }
+.section-selector-4 .col-4 li::marker,
+.section-selector-4 .col-4 ul.fa-ul li span.fa-li i { color: var(--gray-400) }
+.section-selector-4.theme-dark .cols-background .col-4 { background-color: var(--sky-500) }
+
+/* CSS-only info box on hover
+ * Ken Sparby, @kensparby */
+
+ *,
+ *::before,
+ *::after {
+   box-sizing: border-box;
+   margin: 0;
+   padding: 0;
+ }
+
+ .hover-container {
+  position: relative;
+}
+ 
+ .hover-target {
+   position: relative;
+   font-size: 2rem;
+ }
+ 
+ .hover-popup {
+   position: absolute;
+   display: flex;
+   flex-direction: column;
+   justify-content: space-between;
+   top: 60%;
+   left: 40%;
+   width: 20ch;
+   margin: min(1rem, 20px);
+   font-size: .8rem;
+   background-color: #6bebf2;
+   border-radius: 8px;
+   padding: 1.5em;
+   z-index: 42;
+   transform: scale(0);
+   transition: transform 200ms ease;
+   transform-origin: 20% -10px;
+ }
+ 
+ .hover-target:hover + .hover-popup,
+ .hover-target:focus + .hover-popup,
+ .hover-popup:hover{
+   transform: scale(1);
+ }
+ 
+ .hover-popup :not(:first-child) {
+   margin-top: 1rem;
+ }
+ 
+ .hover-popup span {
+   color: rgb(0, 113, 200);
+   font-weight: 700;
+ }
+ 
+ .hover-popup::before {
+ /* This is the triangle/arrow */
+   content: '';
+   position: absolute;
+   border-left: 10px solid transparent;
+   border-right: 10px solid transparent;
+   border-bottom: 10px solid #fff;
+   top: -10px;
+ }
+ 
+ .hover-popup::after {
+   /* This is merely here to expand the hoverable area, as a buffer between the "Hover me" text and the popup. */
+   content: '';
+   position: absolute;
+   top: -1rem;
+   right: 0;
+   bottom: 0;
+   left: 0;
+   z-index: -1;
+ }
+ 
+ @media (prefers-reduced-motion: reduce) {
+   *,
+   ::before,
+   ::after {
+     animation-delay: -1ms !important;
+     animation-duration: -1ms !important;
+     animation-iteration-count: 1 !important;
+     background-attachment: initial !important;
+     scroll-behavior: auto !important;
+     transition-duration: 0s !important;
+     transition-delay: 0s !important;
+   }
+ }
+ /* CSS-only info box on hover end */

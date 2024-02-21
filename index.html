@@ -41,6 +41,10 @@
         .col-1 > h3 { line-height: 1.8 } 
     </style>
 
+    
+    <!-- Styles for Cookie Consent Popup Message  -->
+    <link href="https://cdn.jsdelivr.net/npm/cookieconsent@3/build/cookieconsent.min.css" rel="stylesheet">
+
     <!-- Google tag (gtag.js) -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-L739GS6HS6"></script>
     <script>
@@ -50,6 +54,7 @@
 
     gtag('config', 'G-L739GS6HS6');
     </script>
+
 <!--
 <script>
     // DOM Ready
@@ -116,6 +121,24 @@
   </script>
 
 </head>
+
+<!-- JavaScript for Cookie Consent Popup Message -->
+<script src="https://cdn.jsdelivr.net/npm/cookieconsent@3/build/cookieconsent.min.js" data-cfasync="false"></script>
+<script>
+window.cookieconsent.initialise({
+    "palette": {
+        "popup": {
+            "background": "#000"
+        },
+        "button": {
+            "background": "#f1d600"
+        }
+    },
+    "content": {
+        "href": "username.github.io/privacy.html"
+    }
+});
+</script>
 
 
 <body>

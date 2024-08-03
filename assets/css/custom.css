@@ -1,18 +1,23 @@
 
 nav.theme-dark, nav.theme-dark ul.links-wrapper.active { background: linear-gradient(to right,#365486,#0F1035);  }
 
-header.theme-dark   { background:linear-gradient(to left,#0fdae1,#aee2ef);}
+header.theme-dark   { background:#222222;}
 
 header.theme-dark  h1 { color: black; }
 
 section.theme-dark   { background-color: #365486 }
+
+section.back_black   { background-color: #001100; 
+                      font-family: 'Courier New', Courier, monospace;
+                      color: white;}
+
 
 footer.theme-dark   { background: linear-gradient(to right,#365486,#0F1035);  }
 
 header .col-text h2, .col-1 > h3 { line-height: 1.8 }
 
 header.theme-dark .badge {
-background-color: #0fdae1;
+background-color: #777777;
 }
 section-selector-1 {
     background-color: (to right,#365486,#0F1035);
@@ -161,7 +166,8 @@ main  .a {
  .shadow-pop-bl {
 	-webkit-animation: shadow-pop-bl 1s cubic-bezier(0.250, 0.460, 0.450, 0.940) forwards;
 	        animation: shadow-pop-bl 1s cubic-bezier(0.250, 0.460, 0.450, 0.940) forwards;
-          background-color: #0fdae1;
+          background-color: #999999;
+          color:white;
 }
 @-webkit-keyframes shadow-pop-bl {
   0% {

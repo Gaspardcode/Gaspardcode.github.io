@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Function Chart Example</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+    <canvas id="functionChart" width="400" height="400"></canvas>
+    <script>
+        // Define the function to plot
+        function myFunction(x) {
+            return Math.sin(x); // Example: sine function
+        }
+
+        // Generate data points for the function
+        var xValues = [];
+        var yValues = [];
+        for (var x = -Math.PI; x <= Math.PI; x += 0.1) {
+            xValues.push(x);
+            yValues.push(myFunction(x));
+        }
+
+        // Get the context of the canvas element we want to select
+        var ctx = document.getElementById('functionChart').getContext('2d');
+
+        // Define the data for the chart
+        var data = {
+            labels: xValues,
+            datasets: [{
+                label: 'y = sin(x)',
+                backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                borderColor: 'rgba(75, 192, 192, 1)',
+                borderWidth: 1,
+                data: yValues,
+                fill: false,
+                pointRadius: 0, // Remove points
+                borderWidth: 2 // Line width
+            }]
+        };
+
+        // Define the configuration options for the chart
+        var options = {
+            scales: {
+                x: {
+                    type: 'linear',
+                    position: 'bottom'
+                },
+                y: {
+                    beginAtZero: true
+                }
+            }
+        };
+
+        // Create a new Chart instance
+        var functionChart = new Chart(ctx, {
+            type: 'line', // Specify the type of chart
+            data: data,
+            options: options
+        });
+    </script>
+</body>
+</html>

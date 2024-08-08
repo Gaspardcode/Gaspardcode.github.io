@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Crypto Price Chart</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+    <div>
+        <label for="crypto-select">Select Crypto:</label>
+        <select id="crypto-select">
+            <option value="bitcoin">Bitcoin</option>
+            <option value="ethereum">Ethereum</option>
+            <!-- Add more cryptocurrencies as needed -->
+        </select>
+    </div>
+    <div>
+        <label for="timeframe-select">Select Timeframe:</label>
+        <select id="timeframe-select">
+            <option value="1y">1 Year</option>
+        </select>
+    </div>
+    <canvas id="price-chart" width="600" height="400"></canvas>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const cryptoSelect = document.getElementById('crypto-select');
+            const timeframeSelect = document.getElementById('timeframe-select');
+            const chartCanvas = document.getElementById('price-chart').getContext('2d');
+
+            let chart;
+
+            function generateChart() {
+                // Simulated data for 1 year
+                const chartData = generateSimulatedData();
+                
+                displayChart(chartData);
+            }
+
+            function generateSimulatedData() {
+                const toDate = new Date();
+                const fromDate = new Date();
+                fromDate.setFullYear(fromDate.getFullYear() - 1); // 1 year ago
+                let simulatedData = [];
+                let currentDate = new Date(fromDate);
+
+                while (currentDate <= toDate) {
+                    simulatedData.push({ x: new Date(currentDate), y: Math.random() * 100 + 50 }); // Random data
+                    currentDate.setMonth(currentDate.getMonth() + 1); // Increment by month
+                }
+                return simulatedData;
+            }
+
+            function displayChart(data) {
+                if (chart) {
+                    chart.destroy(); // Destroy the old chart if it exists
+                }
+
+                chart = new Chart(chartCanvas, {
+                    type: 'line',
+                    data: {
+                        datasets: [{
+                            label: 'Price',
+                            data: data,
+                            borderColor: 'blue',
+                            backgroundColor: 'rgba(0, 0, 255, 0.1)',
+                            fill: true,
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: true,
+                        scales: {
+                            x: {
+                                type: 'time',
+                                time: {
+                                    unit: 'month', // Display data in months
+                                    tooltipFormat: 'MMM YYYY', // Tooltip format
+                                },
+                                ticks: {
+                                    maxRotation: 0, // Avoid rotation of labels
+                                    autoSkip: true, // Enable auto-skip of labels
+                                    maxTicksLimit: 12, // Limit number of labels shown
+                                },
+                                grid: {
+                                    display: true, // Show grid on x-axis
+                                    drawBorder: false, // Hide border of x-axis
+                                }
+                            },
+                            y: {
+                                ticks: {
+                                    beginAtZero: false,
+                                    callback: function(value) {
+                                        return '$' + value; // Prefix $ for y-axis labels
+                                    }
+                                }
+                            }
+                        },
+                        plugins: {
+                            tooltip: {
+                                callbacks: {
+                                    label: function(tooltipItem) {
+                                        let label = tooltipItem.dataset.label || '';
+                                        if (label) {
+                                            label += ': ';
+                                        }
+                                        label += '$' + tooltipItem.raw.toFixed(2); // Format price in tooltip
+                                        return label;
+                                    }
+                                }
+                            }
+                        }
+                    }
+                });
+            }
+            
+            generateChart(); // Initialize the chart with default options on page load
+        });
+    </script>
+</body>
+</html>

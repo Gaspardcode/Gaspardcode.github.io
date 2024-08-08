@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Complexity Analyzer</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.0/codemirror.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.0/theme/dracula.min.css">
+    <style>
+        .CodeMirror {
+            height: 300px;
+            border: 1px solid #ddd;
+        }
+        #output {
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Complexity Analyzer</h1>
+    <select id="language-select">
+        <option value="javascript">JavaScript</option>
+        <option value="python">Python</option>
+        <!-- Add more languages as needed -->
+    </select>
+    <textarea id="code-editor"></textarea>
+    <button id="run-btn">Run Analysis</button>
+    <div id="output"></div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.0/codemirror.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.0/mode/javascript/javascript.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.0/mode/python/python.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.0/addon/edit/matchbrackets.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.0/addon/display/placeholder.min.js"></script>
+    <script>
+        // Initialize CodeMirror
+        const editor = CodeMirror.fromTextArea(document.getElementById('code-editor'), {
+            mode: 'javascript',
+            theme: 'dracula',
+            lineNumbers: true,
+            matchBrackets: true,
+            placeholder: "Write your function here..."
+        });
+
+        // Update editor mode based on selected language
+        document.getElementById('language-select').addEventListener('change', (e) => {
+            const mode = e.target.value;
+            editor.setOption('mode', mode);
+        });
+
+        // Run button event handler
+        document.getElementById('run-btn').addEventListener('click', () => {
+            const code = editor.getValue();
+            const language = document.getElementById('language-select').value;
+            runAnalysis(code, language);
+        });
+
+        function runAnalysis(code, language) {
+            const output = document.getElementById('output');
+            output.innerHTML = ''; // Clear previous output
+
+            if (language === 'javascript') {
+                analyzeJavaScriptFunction(code, output);
+            } else if (language === 'python') {
+                analyzePythonFunction(code, output);
+            }
+            // Add more languages as needed
+        }
+
+        function analyzeJavaScriptFunction(code, output) {
+            // Create a new function from the code and measure execution time
+            let func;
+            try {
+                func = new Function('n', code);
+            } catch (e) {
+                output.innerHTML = `<p>Error compiling JavaScript code: ${e.message}</p>`;
+                return;
+            }
+
+            const results = [];
+            for (let n = 1; n <= 1000000000; n *= 2) {
+                const start = performance.now();
+                func(n);
+                const end = performance.now();
+                results.push({ n, time: end - start });
+            }
+
+            output.innerHTML = '<h2>Results:</h2><ul>' +
+                results.map(r => `<li>n = ${r.n}, Time = ${r.time.toFixed(2)} ms</li>`).join('') +
+                '</ul>';
+        }
+
+        function analyzePythonFunction(code, output) {
+            output.innerHTML = '<p>Python code execution is not supported in this demo.</p>';
+        }
+    </script>
+</body>
+</html>

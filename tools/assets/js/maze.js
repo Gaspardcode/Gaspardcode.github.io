@@ -27,6 +27,15 @@ function getCanvasCoordinates(e) {
 
 // Initialisation du labyrinthe
 function initMaze() {
+    canvas.width = window.innerWidth - window.innerWidth * 0.2;
+    canvas.height = window.innerHeight - window.innerHeight * 0.2;
+    if(canvas.height > canvas.width) {
+        canvas.height = canvas.width;
+    }
+    /* To make the make square
+    maxi = Math.min(canvas.width, canvas.height);
+    canvas.width = canvas.height = maxi;
+    */
     rows = Math.floor(canvas.height / cellSize);
     cols = Math.floor(canvas.width / cellSize);
     maze = Array.from({ length: rows }, () => Array(cols).fill('white'));
@@ -91,6 +100,7 @@ function setEndPosition(event) {
 // Fonction pour générer un labyrinthe aléatoire
 function generateRandomMaze() {
     initMaze();
+    do {
     for (let r = 0; r < rows; r++) {
         for (let c = 0; c < cols; c++) {
             maze[r][c] = Math.random() < 0.3 ? 'black' : 'white';
@@ -100,6 +110,7 @@ function generateRandomMaze() {
     end = { row: rows - 1, col: cols - 1 };
     maze[start.row][start.col] = 'white';
     maze[end.row][end.col] = 'white';
+    } while (!findPath(start, end));
     drawMaze();
 }
 

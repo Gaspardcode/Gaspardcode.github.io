@@ -131,10 +131,10 @@
                 <div class="col-1-badge" style="background-color: white; color: black;">Maze builder</div>
                 <div class="cols-1 text-center">
                     <div id="maze-container">
-                            <canvas id="canvas" display="flex" width="500" height="500"></canvas>
+                            <canvas id="canvas" width="400" height="400"></canvas>
                             <div class="controls">
-                                <button class="control" onclick="generateRandomMaze()">Generate random Maze</button>
-                                <button class="control" onclick="solveMaze()">Solve the maze</button>
+                                <button onclick="generateRandomMaze()">Generate random Maze</button>
+                                <button onclick="solveMaze()">Solve the maze</button>
                                 <div id="info">Select your brush-color below.</div>
                                 <div class="color-picker">
                                     <div class="color-box" style="background-color: black;" onclick="setBrushColor('black')"></div>

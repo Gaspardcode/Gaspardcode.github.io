@@ -188,3 +188,4 @@ canvas.addEventListener('mouseup', () => {
 });
 
 initMaze(); // Initialiser le labyrinthe au chargement de la page
+generateRandomMaze(); // Générer un labyrinthe aléatoire au chargement de la page

@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="fr">
+<html lang="eng">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -14,6 +14,7 @@
             align-items: center;
             /*height: 100vh;*/
             background-color: #faf8ef;
+            margin:0px;
         }
         #score {
             font-size: 24px;
@@ -35,6 +36,23 @@
             justify-content: center;
             align-items: center;
             border-radius: 5px;
+        }
+        #leaderboard {
+            justify-content: right;
+        }
+        .dashboard-cards {
+            background-color: #f9f9f9;
+            border-radius: 10px;
+            padding: 20px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        .dashboard {
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            gap: 15px;
         }
         .tile[data-value="2"]    { background-color: #eee4da; color: #776e65; }
         .tile[data-value="4"]    { background-color: #ede0c8; color: #776e65; }
@@ -64,6 +82,11 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Anonymous+Pro:ital,wght@0,400;0,700;1,400;1,700&display=swap" rel="stylesheet">
+    
+    <!-- Firebase imports -->
+    <script src="https://www.gstatic.com/firebasejs/10.12.5/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.12.5/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.12.5/firebase-firestore-compat.js"></script>
     
    </head>
 
@@ -100,14 +123,16 @@
             </div>
         </div>
     </nav>
+    <span class="dashboard">
+        <div class="dashboard-cards" id="score">Score: 0</div>
+        <div class = "dashboard-cards" id="game-board"></div>
+        <div class="dashboard-cards" id="leaderboard">
+            <h2>Leaderboard</h2>
+        </div>
+    </span>
     
-    <div id="score">Score: 0</div>
-    <div id="game-board"></div>
-
-    <script src="https://www.gstatic.com/firebasejs/10.12.5/firebase-app-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/10.12.5/firebase-firestore-compat.js"></script>
-
-    <script >
+    
+    <script>
          const firebaseConfig = {
             apiKey: "AIzaSyCFu-Dh9zwypzRBa9JBipmrJSDmGBoPfxs",
             authDomain: "website-8c2a3.firebaseapp.com",
@@ -120,16 +145,31 @@
 
         // Initialize Firebase
         const app = firebase.initializeApp(firebaseConfig);
-
         // Initialise Firestore
         const db = firebase.firestore();
+        // Authentification
+        const auth = firebase.auth();
+
+        var uid = null;
+
+        auth.signInAnonymously()
+            .then(() => {
+                // Signed in..
+                
+            })
+            .catch((error) => {
+                console.log(`${error.message}`);
+        });
+        auth.onAuthStateChanged((user) => {
+            if (user) {
+                uid = user.uid;
+            }
+        });
+
     </script>
 
     <!-- Once firebase is setup, uncomment-->
     <script src="../assets/js/2048.js"></script>
-    <div id="leaderboard">
-        <h2>Leaderboard</h2>
-    </div>
     
     
     </body>

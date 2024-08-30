@@ -9,6 +9,7 @@
             addRandomTile();
             addRandomTile();
             updateBoard();
+            getLeaderboard();
         }
 
         function updateScore() {
@@ -136,9 +137,7 @@
                     break;
             }
             updateBoard();
-            if (checkGameOver()) {
-                initBoard();
-            }
+            checkGameOver();
         });
 
         /*LEADERBOARD*/
@@ -157,6 +156,9 @@
         async function getLeaderboard() {
             const leaderboard = document.getElementById('leaderboard');
             leaderboard.innerHTML = ''; // Clear current leaderboard
+            const title = document.createElement('h2');
+            title.textContent = "Leaderboard";
+            leaderboard.appendChild(title);
 
             try {
                 const querySnapshot = await db.collection("leaderboard")
@@ -164,11 +166,14 @@
                     .limit(10) // Limite à 10 les scores affichés
                     .get();
                 
+                cnt = 1;
                 querySnapshot.forEach((doc) => {
                     const data = doc.data();
                     const entry = document.createElement('div');
-                    entry.textContent = `${data.username}: ${data.score}`;
+                    entry.textContent = `${cnt}        |       ${data.username} | highest score: ${data.score}`;
+                    cnt += 1;
                     leaderboard.appendChild(entry);
+                    console.log(entry.textContent);
                 });
             } catch (e) {
                 console.error("Error getting documents: ", e);
@@ -179,7 +184,6 @@
             if (playerName) {
                 addScoreToLeaderboard(playerName, score);
             }
-            getLeaderboard();  // Met à jour le leaderboard après avoir ajouté un nouveau score
             initBoard();  // Redémarre le jeu
         }
 

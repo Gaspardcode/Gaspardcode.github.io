@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="eng">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -14,18 +15,21 @@
             align-items: center;
             /*height: 100vh;*/
             background-color: #faf8ef;
-            margin:0px;
+            margin: 0px;
         }
+
         #score {
             font-size: 24px;
             margin-bottom: 20px;
         }
+
         #game-board {
             display: grid;
             grid-template-columns: repeat(5, 100px);
             grid-template-rows: repeat(5, 100px);
             gap: 10px;
         }
+
         .tile {
             width: 100px;
             height: 100px;
@@ -37,9 +41,11 @@
             align-items: center;
             border-radius: 5px;
         }
+
         #leaderboard {
             justify-content: right;
         }
+
         .dashboard-cards {
             background-color: #f9f9f9;
             border-radius: 10px;
@@ -48,56 +54,102 @@
             text-align: center;
             margin-bottom: 20px;
         }
+
         .dashboard {
             display: flex;
             flex-direction: row;
             align-items: center;
             gap: 15px;
         }
-        .tile[data-value="2"]    { background-color: #eee4da; color: #776e65; }
-        .tile[data-value="4"]    { background-color: #ede0c8; color: #776e65; }
-        .tile[data-value="8"]    { background-color: #f2b179; color: #f9f6f2; }
-        .tile[data-value="16"]   { background-color: #f59563; color: #f9f6f2; }
-        .tile[data-value="32"]   { background-color: #f67c5f; color: #f9f6f2; }
-        .tile[data-value="64"]   { background-color: #f65e3b; color: #f9f6f2; }
-        .tile[data-value="128"]  { background-color: #edcf72; color: #f9f6f2; }
-        .tile[data-value="256"]  { background-color: #edcc61; color: #f9f6f2; }
-        .tile[data-value="512"]  { background-color: #edc850; color: #f9f6f2; }
-        .tile[data-value="1024"] { background-color: #edc53f; color: #f9f6f2; }
-        .tile[data-value="2048"] { background-color: #edc22e; color: #f9f6f2; }
+
+        .tile[data-value="2"] {
+            background-color: #eee4da;
+            color: #776e65;
+        }
+
+        .tile[data-value="4"] {
+            background-color: #ede0c8;
+            color: #776e65;
+        }
+
+        .tile[data-value="8"] {
+            background-color: #f2b179;
+            color: #f9f6f2;
+        }
+
+        .tile[data-value="16"] {
+            background-color: #f59563;
+            color: #f9f6f2;
+        }
+
+        .tile[data-value="32"] {
+            background-color: #f67c5f;
+            color: #f9f6f2;
+        }
+
+        .tile[data-value="64"] {
+            background-color: #f65e3b;
+            color: #f9f6f2;
+        }
+
+        .tile[data-value="128"] {
+            background-color: #edcf72;
+            color: #f9f6f2;
+        }
+
+        .tile[data-value="256"] {
+            background-color: #edcc61;
+            color: #f9f6f2;
+        }
+
+        .tile[data-value="512"] {
+            background-color: #edc850;
+            color: #f9f6f2;
+        }
+
+        .tile[data-value="1024"] {
+            background-color: #edc53f;
+            color: #f9f6f2;
+        }
+
+        .tile[data-value="2048"] {
+            background-color: #edc22e;
+            color: #f9f6f2;
+        }
     </style>
-    
+
     <!-- Favicon is ugly and needs to be updated
     <link rel="apple-touch-icon" sizes="180x180" href="../../assets/img/apple-touch-icon.png">
     <link rel="icon" type="image/png" sizes="32x32" href="../../assets/img/favi-32-no-bg.png">
     <link rel="manifest" href="../../assets/img/site.webmanifest">
     -->
 
-	<!-- Stylesheets -->
+    <!-- Stylesheets -->
     <link rel="stylesheet" href="https://lunevedy.com/assets/2.0/css/lunevedy.min.css" />
     <link rel="stylesheet" href="../../assets/css/custom.css" />
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"> 
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 
-	<!-- Google Fonts -->
+    <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Anonymous+Pro:ital,wght@0,400;0,700;1,400;1,700&display=swap" rel="stylesheet">
-    
+    <link href="https://fonts.googleapis.com/css2?family=Anonymous+Pro:ital,wght@0,400;0,700;1,400;1,700&display=swap"
+        rel="stylesheet">
+
     <!-- Firebase imports -->
     <script src="https://www.gstatic.com/firebasejs/10.12.5/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.12.5/firebase-auth-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.12.5/firebase-firestore-compat.js"></script>
-    
-   </head>
+
+</head>
 
 <body>
     <!-- navigation -->
     <nav class="theme-dark">
         <div class="container-menu">
             <a href="#" class="brand">
-                <img class ="logo" src="../../assets/img/logo.png" width="400" height="400" alt="sample website logo">
+                <img class="logo" src="../../assets/img/logo.png" width="400" height="400" alt="sample website logo">
             </a>
-        
+
             <div class="container-menu-links" style="font-family: 'anonymous pro', monospace;">
                 <div class="nav-toggle" id="nav-toggle-btn">
                     <div class="bar-1"></div>
@@ -112,7 +164,7 @@
                     </li>
                     <li>
                         <a href="../index.html">
-                        Tools 
+                            Tools
                         </a>
                     </li>
                     <li>
@@ -125,15 +177,15 @@
     </nav>
     <span class="dashboard">
         <div class="dashboard-cards" id="score">Score: 0</div>
-        <div class = "dashboard-cards" id="game-board"></div>
+        <div class="dashboard-cards" id="game-board"></div>
         <div class="dashboard-cards" id="leaderboard">
             <h2>Leaderboard</h2>
         </div>
     </span>
-    
-    
+
+
     <script>
-         const firebaseConfig = {
+        const firebaseConfig = {
             apiKey: "AIzaSyCFu-Dh9zwypzRBa9JBipmrJSDmGBoPfxs",
             authDomain: "website-8c2a3.firebaseapp.com",
             projectId: "website-8c2a3",
@@ -155,11 +207,11 @@
         auth.signInAnonymously()
             .then(() => {
                 // Signed in..
-                
+
             })
             .catch((error) => {
                 console.log(`${error.message}`);
-        });
+            });
         auth.onAuthStateChanged((user) => {
             if (user) {
                 uid = user.uid;
@@ -170,7 +222,8 @@
 
     <!-- Once firebase is setup, uncomment-->
     <script src="../assets/js/2048.js"></script>
-    
-    
-    </body>
+
+
+</body>
+
 </html>

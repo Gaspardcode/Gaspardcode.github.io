@@ -97,7 +97,6 @@
                     }
                 }
             }
-
             if (moved) {
                 addRandomTile();
             }
@@ -188,4 +187,3 @@
         }
 
     initBoard();
- 

@@ -9,6 +9,7 @@ const firebaseConfig = {
 };
 const app = firebase.initializeApp(firebaseConfig);
 const db = firebase.firestore();
+const auth = firebase.auth();
 
 self.addEventListener('fetch', async (event) => {
     if (event.request.method === 'POST') {
@@ -18,8 +19,8 @@ self.addEventListener('fetch', async (event) => {
             // Save to Firestore
             await db.collection('end-point').add(data);
 
-            // Send a success response
-            event.respondWith(new Response('Data saved successfully', { status: 200 }));
+         event.respondWith(new 
+         Response('Data saved successfully', { status: 200 }));
         } catch (error) {
             console.error('Error saving to Firestore:', error);
             event.respondWith(new Response('Error saving data', { status: 500 }));

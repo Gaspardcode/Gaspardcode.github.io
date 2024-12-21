@@ -3,14 +3,20 @@
 <head>
     <meta charset="UTF-8">
     <title>API</title>
-    <script type="module" 
-        src="https://www.gstatic.com/firebasejs/10.3.1/firebase-app.js">
-    </script>
-    <script type="module" 
-        src="https://www.gstatic.com/firebasejs/10.3.1/firebase-firestore.js">
-    </script>
-    <script type="module" src="post.js" defer></script>
 </head>
 <body>
+<script type="module">
+    import { initializeApp } 
+    from 'https://www.gstatic.com/firebasejs/10.13.1/firebase-app.js'
+    import { getAuth } 
+    from 'https://www.gstatic.com/firebasejs/10.13.1/firebase-auth.js'
+    import { getFirestore }
+    from 'https://www.gstatic.com/firebasejs/10.13.1/firebase-firestore.js'
+
+    const app = initializeApp(firebaseConfig);
+    const db = getFirestore();
+    const auth = getAuth();
+  </script>
+    <script src="post.js"></script>
 </body>
 </html>

@@ -16,11 +16,12 @@ self.addEventListener('fetch', async (event) => {
         // Save to Firestore
         await db.collection('end-point').add(data);
 
+        console.log('Data processed');
         event.respondWith(new 
                 Response('Data saved successfully', { status: 200 }));
         } catch (error) {
         console.error('Error saving to Firestore:', error);
         event.respondWith(new Response('Error saving data', { status: 500 }));
         }
-        }
-        });
+    }
+});

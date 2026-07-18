@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>How to Not Automate Your LinkedIn Profile | Blog</title>
+    <meta name="description" content="Scraping, hiQ Labs v. LinkedIn, TLS fingerprinting, and the AI-vs-bot-detection arms race.">
+
+    <!--Favicon-->
+    <link rel="apple-touch-icon" sizes="180x180" href="../../assets/img/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="../../assets/img/favi-32-no-bg.png">
+    <link rel="manifest" href="../../assets/img/site.webmanifest">
+
+	<!-- Stylesheets -->
+    <link rel="stylesheet" href="https://lunevedy.com/assets/2.0/css/lunevedy.min.css" />
+    <link rel="stylesheet" href="../../assets/css/custom.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" integrity="sha512-9usAa10IRO0HhonpyAIVpjrylPvoDwiPUiKdWk5t3PyolY1cOd4DSE0Ga+ri4AuTroPR5aQvXU9xC6qOPnzFeg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+
+	<!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Anonymous+Pro:ital,wght@0,400;0,700;1,400;1,700&display=swap" rel="stylesheet">
+
+    <style>
+        .article {
+            max-width: 760px;
+            margin: 0 auto;
+            padding: 3rem 1.5rem 4rem;
+            text-align: left;
+            color: white;
+            line-height: 1.7;
+        }
+        .article h1 {
+            text-align: center;
+            margin-bottom: 0.5rem;
+        }
+        .article .subtitle {
+            text-align: center;
+            color: rgba(220, 242, 241, 0.65);
+            margin-bottom: 2.5rem;
+        }
+        .article h2 {
+            margin-top: 2.2rem;
+            margin-bottom: 0.8rem;
+            color: #7FC7D9;
+        }
+        .article p {
+            margin-bottom: 1.1rem;
+        }
+        .article ul {
+            margin: 0 0 1.1rem 1.4rem;
+            list-style: disc;
+        }
+        .article li {
+            margin-bottom: 0.5rem;
+        }
+        .article strong {
+            color: #7FC7D9;
+        }
+        .article a.help {
+            text-decoration: underline;
+        }
+        .back-link {
+            display: block;
+            max-width: 760px;
+            margin: 0 auto;
+            padding: 1.5rem 1.5rem 0;
+        }
+    </style>
+
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-L739GS6HS6"></script>
+    <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-L739GS6HS6');
+    </script>
+
+</head>
+<body>
+
+    <!-- NAVIGATION -->
+    <nav class="theme-dark"><div class="container-menu">
+        <a href="#" class="brand">
+            <img class ="logo" src="../../assets/img/logo.png" width="400" height="400" alt="Sample website logo">
+        </a>
+
+        <div class="container-menu-links" style="font-family: 'Anonymous Pro', monospace;">
+
+            <div class="nav-toggle" id="nav-toggle-btn">
+                <div class="bar-1"></div>
+                <div class="bar-2"></div>
+                <div class="bar-3"></div>
+            </div>
+
+            <ul class="links-wrapper">
+                <li>
+                    <a href="../../index.html">
+                        <i class="fas fa-home"></i>
+                    </a>
+                </li>
+                <li>
+                    <a href="../../tools/index.html">
+                        Tools
+                    </a>
+                </li>
+                <li>
+                    <a href="../../portfolio/index.html"> WebDev </a>
+                </li>
+                <li>
+                    <a href="../index.html"> Blog </a>
+                </li>
+                <li><a href="../../contact/index.html"> About me </a></li>
+            </ul>
+                </div>
+            </div>
+        </nav>
+
+    <main style="background-color: #0F1035;">
+        <a class="help back-link" href="../index.html">&larr; Back to Blog</a>
+        <article class="article">
+            <h1 class="shadow-pop-bl" style="display:inline-block; padding: 0.3em 0.6em;">How to Not Automate Your LinkedIn Profile</h1>
+            <p class="subtitle">Scraping, hiQ Labs v. LinkedIn, TLS fingerprinting, and the AI-vs-bot-detection arms race.</p>
+
+            <p>A few weeks ago I had what felt like a genius idea: what if I just... didn't do LinkedIn anymore? Not "delete my account and become a mountain hermit" levels of not-doing-it, but the modern, lazy-genius version — get an LLM agent to do it for me. I imagined the workflow: I tell my agent "hey, I just got a cert in Kubernetes, also I did an afterwork with the team and Karen from Sales taught me something profound about resilience," and thirty seconds later a perfectly on-brand post appears on my profile, opening with the two most feared words in the English language: <strong>"Dear network,"</strong> followed by three paragraphs about vulnerability, growth, and a stock photo of a sunrise over an office building. Truly, humanity's crowning achievement.</p>
+
+            <p>So naturally, being the kind of person who reaches for a browser automation script before reaching for "maybe I should just click the buttons myself," I asked: can I just script this? Login, click, upload, post, done. Turns out the answer is a very confident "lol no," and figuring out <em>why</em> took me down a much more interesting rabbit hole than the blog post I was originally going to write.</p>
+
+            <h2>The scraping wars, or: hiQ Labs vs. the Empire</h2>
+            <p>Before we get to the "how," it's worth understanding the "why LinkedIn cares so much." This isn't a new fight. The most famous chapter is the <strong>hiQ Labs v. LinkedIn</strong> saga, which ran from 2017 to 2022 and is basically the <em>Bleak House</em> of internet law — a case so long-running it outlived several people's optimism about the judicial system.</p>
+            <p>hiQ Labs was a company that scraped <em>public</em> LinkedIn profiles to sell workforce analytics to employers — things like "hey, this employee's profile activity suggests they're about to quit." LinkedIn sent a cease-and-desist and started blocking hiQ's bots. hiQ sued back, arguing that if the data is public, blocking access under the Computer Fraud and Abuse Act (CFAA) is basically weaponizing an anti-hacking law against, well, looking at a webpage. The Ninth Circuit initially agreed with hiQ (2019), the Supreme Court told everyone to try again after a different ruling (<em>Van Buren</em>, 2021), and by 2022 the courts sided with LinkedIn on remand. hiQ, having spent five years and presumably several million dollars proving a point, shut down shortly after.</p>
+            <p>The lesson nobody wanted but everybody got: "the data is public" and "you're allowed to scrape it at scale" are two very different legal claims, and platforms will spend years and lawyers making sure everyone remembers that.</p>
+
+            <h2>Why the paranoia, though?</h2>
+            <p>It's not just lawyer-brain. There are real stakes:</p>
+            <ul>
+                <li><strong>The data <em>is</em> the product.</strong> LinkedIn doesn't sell you a social network, it sells access to a graph of 900M+ professionals, monetized through Recruiter, Sales Navigator, and Premium. A bot that scrapes the whole graph for free is, structurally, a competitor stealing the warehouse.</li>
+                <li><strong>Ad fraud.</strong> Advertisers pay per impression/click. Bot traffic means paying for eyeballs that don't exist, which is the kind of thing that makes CFOs very unhappy very quickly.</li>
+                <li><strong>Trust as a feature.</strong> LinkedIn's whole pitch versus "the other" social networks is "this is the <em>serious</em> one." Fake engagement, spam connection requests, and bot-generated "Dear network" posts (wait) erode exactly that pitch.</li>
+                <li><strong>Infra cost.</strong> Someone has to pay for the servers getting hammered by scrapers, and it's not going to be the scraper.</li>
+            </ul>
+            <p>So yes: since Microsoft acquired LinkedIn in 2016 for a cool $26.2B, it inherited not just a social network but also Microsoft's institutional muscle memory for fraud and bot detection — the same lineage that protects Azure AD sign-ins and Xbox Live's anti-cheat. This is not a scrappy startup improvising defenses; it's enterprise-grade anti-automation, mutualized across one of the largest security orgs on Earth.</p>
+
+            <h2>The toolbox, broadly</h2>
+            <p>Modern bot defense is a layered cake, and no single slice is meant to stop you alone — it's the accumulation that gets you:</p>
+            <ul>
+                <li><strong>Browser fingerprinting</strong>: canvas/WebGL/audio rendering quirks, installed fonts, <code>navigator.webdriver</code>, and a hundred other JS properties that quietly out headless or automated browsers.</li>
+                <li><strong>Behavioral biometrics</strong>: mouse movement curvature, typing cadence, scroll jitter. Humans are messy; bots (by default) are suspiciously perfect.</li>
+                <li><strong>Network fingerprinting</strong>: TLS handshake signatures that differ between <code>curl</code>, Python <code>requests</code>, and an actual Chrome browser, regardless of what User-Agent string you lie about.</li>
+                <li><strong>IP/ASN reputation</strong>: datacenter IPs (hi, AWS) get side-eyed; residential IPs get more trust, at least until they don't.</li>
+                <li><strong>Adaptive challenges</strong>: CAPTCHA (LinkedIn leans on Arkose Labs) and OTP prompts that trigger when your "risk score" crosses a threshold.</li>
+                <li><strong>Graph-level anomaly detection</strong>: sending 200 connection requests in ten minutes is not something a human does unless that human has deeply concerning priorities.</li>
+                <li><strong>No public profile-editing API</strong>: the humblest but maybe most effective defense — force everyone through the web UI, the single hardest surface to automate reliably over time.</li>
+            </ul>
+
+            <h2>Zooming in: TLS fingerprinting (a.k.a. your handshake has a tell)</h2>
+            <p>Let's go deeper on one, because it's the one most people don't expect: <strong>your TLS handshake gives you away before a single byte of HTTP is exchanged.</strong></p>
+            <p>When any client — browser, script, bot — opens an HTTPS connection, it sends a <code>ClientHello</code> packet listing things like supported cipher suites, TLS extensions, elliptic curves, and their order. This isn't random; each TLS library constructs this list in a specific, deterministic way. Chrome's OpenSSL-based stack produces a different <code>ClientHello</code> shape than Python's <code>requests</code> (via OpenSSL too, but different version/config), which differs again from <code>curl</code>, which differs again from headless Chromium under Playwright.</p>
+            <p>This gets hashed into something called a <strong>JA3 fingerprint</strong> (and its newer, meaner cousin <strong>JA4</strong>): essentially a fingerprint of <em>how</em> your TLS client talks, computed before authentication, before cookies, before your carefully spoofed User-Agent header even gets read. You can set your User-Agent to "Mozilla/5.0 definitely a real human browser," and it won't matter one bit if your JA3 hash matches "known automation library" in someone's threat intel database.</p>
+            <p>The delightfully evil part: even real Chrome driven by Playwright/Puppeteer via the DevTools Protocol can produce a TLS fingerprint subtly different from a human clicking around in the same Chrome build, because of how the automation harness configures the underlying network stack. Beating this requires tools that specifically rewrite the TLS layer to mimic a genuine browser (<code>curl-impersonate</code>, <code>utls</code> in Go, etc.) — an entire sub-industry exists solely to make scripts <em>sound</em> more human at the packet level, which is either impressive or deeply unhinged depending on your mood that day.</p>
+
+            <h2>The escalation nobody asked for: now with AI</h2>
+            <p>Here's the part that should worry both sides of this fight. Every layer above assumes bots are <em>worse</em> than humans at being human — jerky mouse movement, too-perfect typing, predictable timing. That assumption is aging badly.</p>
+            <p>Generative models can now produce human-plausible mouse trajectories, humanlike typing jitter, and — the thing that started this whole article — humanlike <em>text</em>, meaning the final tell (a bot-sounding "Dear network" post) is disappearing too. The very tool I wanted to use to automate my profile is also, structurally, the thing making bot detection harder for everyone, including LinkedIn's own team down the hall from the "please don't scrape us" lawyers.</p>
+            <p>Which means the anti-bot arms race isn't really about catching sloppy scripts anymore — the sloppy scripts were always losing. It's about detecting <em>increasingly good imitations of humans</em>, at the exact moment imitating humans became a commodity API call. Somewhere in a Redmond office, someone's threat model just got a lot more interesting.</p>
+            <p>As for me? I closed the Playwright tab, opened LinkedIn manually, and typed my own "Dear network" post about learning resilience from an afterwork. It took four minutes and, I'll admit, felt more honest than automating it ever would have — mostly because now at least <em>one</em> of us in this exchange is definitely human.</p>
+        </article>
+    </main>
+
+	<footer class="theme-dark text-center-desktop text-center-mobile">
+		<h2>Gaspard TORTERAT--SLANDA</h2>
+		<h3>Computer science enthusiast</h3>
+		<ul class="footer-links">
+			<li><a href="../../index.html"><i class="fas fa-home"></i></a></li>
+			<li><a href="../../portfolio/index.html">Portfolio</a></li>
+            <li><a href="../../contact/index.html">Contact</a></li>
+		</ul>
+		<ul class="footer-icons">
+			<li><a href="https://www.linkedin.com/in/gaspard-torterat-slanda-393046263/" target="_blank"><i class="fab fa-linkedin"></i></a></li>
+			<li><a href="https://github.com/Gaspardcode" target="_blank"><i class="fab fa-github-square"></i></a></li>
+		</ul>
+		<p class="privacy"><a href="../../privacy.html">Privacy &amp; Legal</a></p>
+	</footer>
+    <script src="https://lunevedy.com/assets/js/lunevedy.js"></script>
+
+</body>
+</html>

@@ -1,24 +1,111 @@
 
-nav.theme-dark, nav.theme-dark ul.links-wrapper.active { background: linear-gradient(to right,#222222,#111111);  }
+:root {
+    --navy-950: #0F1035;
+    --navy-800: #171a44;
+    --steel-500: #365486;
+    --sky-300: #7FC7D9;
+    --pale-100: #DCF2F1;
+}
 
-header.theme-dark   { background:#222222;}
+nav.theme-dark, nav.theme-dark ul.links-wrapper.active { background: linear-gradient(to right,var(--navy-800),var(--navy-950));  }
 
-header.theme-dark  h1 { color: black; }
+header.theme-dark   { background: var(--navy-800); }
 
-section.theme-dark   { background-color: #365486 }
+header.theme-dark  h1 { color: var(--pale-100); }
 
-section.back_black   { background-color: #001100; 
+section.theme-dark   { background-color: var(--steel-500) }
+
+section.back_black   { background-color: var(--navy-950);
                       font-family: 'Courier New', Courier, monospace;
-                      color: white;}
+                      color: var(--pale-100);}
 
 
-footer.theme-dark   { background: linear-gradient(to right,#365486,#0F1035);  }
+footer.theme-dark   { background: linear-gradient(to right,var(--steel-500),var(--navy-950));  }
 
 header .col-text h2, .col-1 > h3 { line-height: 1.8 }
 
 header.theme-dark .badge {
-background-color: #777777;
+background-color: var(--steel-500);
+color: var(--pale-100);
 }
+
+.col-1-badge {
+    background-color: var(--pale-100);
+    color: var(--navy-950);
+}
+
+/* Shared terminal-style animation utilities (used on the homepage and blog) */
+
+.sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
+}
+
+.ascii-banner {
+    display: inline-block;
+    text-align: left;
+    margin: 1.5rem 0 0.5rem;
+    font-family: 'Courier New', Courier, monospace;
+    font-size: clamp(0.45rem, 1.7vw, 1rem);
+    line-height: 1.15;
+    color: var(--sky-300);
+    text-shadow: 0 0 10px rgba(127, 199, 217, 0.55);
+    max-width: 100%;
+    overflow-x: auto;
+}
+
+.reveal-line {
+    display: block;
+    opacity: 0;
+    transform: translateY(-6px);
+    animation: reveal-in 0.35s ease-out forwards;
+}
+.reveal-line:nth-child(1) { animation-delay: 0.05s; }
+.reveal-line:nth-child(2) { animation-delay: 0.18s; }
+.reveal-line:nth-child(3) { animation-delay: 0.31s; }
+.reveal-line:nth-child(4) { animation-delay: 0.44s; }
+.reveal-line:nth-child(5) { animation-delay: 0.57s; }
+.reveal-line:nth-child(6) { animation-delay: 0.70s; }
+.reveal-line:nth-child(7) { animation-delay: 0.83s; }
+.reveal-line:nth-child(8) { animation-delay: 0.96s; }
+@keyframes reveal-in {
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.terminal-line {
+    --type-steps: 22;
+    --type-width: 22ch;
+    --type-delay: 1s;
+    display: inline-block;
+    font-family: 'Courier New', Courier, monospace;
+    color: var(--pale-100);
+    white-space: nowrap;
+    overflow: hidden;
+    width: 0;
+    border-right: 2px solid var(--sky-300);
+    margin-bottom: 1rem;
+    animation: typing 1.3s steps(var(--type-steps), end) var(--type-delay) forwards,
+               blink-caret 0.8s step-end infinite;
+}
+@keyframes typing {
+    from { width: 0; }
+    to { width: var(--type-width); }
+}
+@keyframes blink-caret {
+    50% { border-color: transparent; }
+}
+@media (prefers-reduced-motion: reduce) {
+    .reveal-line { animation: none; opacity: 1; transform: none; }
+    .terminal-line { animation: none; width: var(--type-width); }
+}
+
 section-selector-1 {
     background-color: (to right,#365486,#0F1035);
 }
@@ -166,8 +253,8 @@ main  .a {
  .shadow-pop-bl {
 	-webkit-animation: shadow-pop-bl 1s cubic-bezier(0.250, 0.460, 0.450, 0.940) forwards;
 	        animation: shadow-pop-bl 1s cubic-bezier(0.250, 0.460, 0.450, 0.940) forwards;
-          background-color: #999999;
-          color:white;
+          background-color: var(--sky-300);
+          color: var(--navy-950);
 }
 @-webkit-keyframes shadow-pop-bl {
   0% {
@@ -199,7 +286,7 @@ main  .a {
 }
 
 .section-selector-1.theme-light .cols-shadows .col-4 { box-shadow: rgba(0, 0, 0, 0.2) 7px 7px 7px 0px}
-.section-selector-4.theme-dark { background:linear-gradient(to right,#0fdae1,#aee2ef); }
+.section-selector-4.theme-dark { background:linear-gradient(to right,var(--steel-500),var(--sky-300)); }
 .section-selector-4 .col-4 li::marker,
 .section-selector-4 .col-4 ul.fa-ul li span.fa-li i { color: var(--gray-400) }
 .section-selector-4.theme-dark .cols-background .col-4 { background-color: var(--sky-500) }

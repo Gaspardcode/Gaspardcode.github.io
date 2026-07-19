@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The new roman empire - Tech ecosystem at Google | Blog</title>
+    <meta name="description" content="B4, Espresso, Colossus and Spanner, how Google's private infrastructure dwarfs Europe's telecom incumbents, and why Europe needs a networking awakening.">
+
+    <!--Favicon-->
+    <link rel="apple-touch-icon" sizes="180x180" href="../../assets/img/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="../../assets/img/favi-32-no-bg.png">
+    <link rel="manifest" href="../../assets/img/site.webmanifest">
+
+	<!-- Stylesheets -->
+    <link rel="stylesheet" href="https://lunevedy.com/assets/2.0/css/lunevedy.min.css" />
+    <link rel="stylesheet" href="../../assets/css/custom.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" integrity="sha512-9usAa10IRO0HhonpyAIVpjrylPvoDwiPUiKdWk5t3PyolY1cOd4DSE0Ga+ri4AuTroPR5aQvXU9xC6qOPnzFeg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+
+	<!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Anonymous+Pro:ital,wght@0,400;0,700;1,400;1,700&display=swap" rel="stylesheet">
+
+    <style>
+        .article {
+            max-width: 760px;
+            margin: 0 auto;
+            padding: 3rem 1.5rem 4rem;
+            text-align: left;
+            color: white;
+            line-height: 1.7;
+        }
+        .article h1 {
+            text-align: center;
+            margin-bottom: 0.5rem;
+        }
+        .article .subtitle {
+            text-align: center;
+            color: rgba(220, 242, 241, 0.65);
+            margin-bottom: 2.5rem;
+        }
+        .article h2 {
+            margin-top: 2.2rem;
+            margin-bottom: 0.8rem;
+            color: #7FC7D9;
+        }
+        .article p {
+            margin-bottom: 1.1rem;
+        }
+        .article ul {
+            margin: 0 0 1.1rem 1.4rem;
+            list-style: disc;
+        }
+        .article li {
+            margin-bottom: 0.5rem;
+        }
+        .article strong {
+            color: #7FC7D9;
+        }
+        .article a.help {
+            text-decoration: underline;
+        }
+        .back-link {
+            display: block;
+            max-width: 760px;
+            margin: 0 auto;
+            padding: 1.5rem 1.5rem 0;
+        }
+    </style>
+
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-L739GS6HS6"></script>
+    <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-L739GS6HS6');
+    </script>
+
+</head>
+<body>
+
+    <!-- NAVIGATION -->
+    <nav class="theme-dark"><div class="container-menu">
+        <a href="#" class="brand">
+            <img class ="logo" src="../../assets/img/logo.png" width="400" height="400" alt="Sample website logo">
+        </a>
+
+        <div class="container-menu-links" style="font-family: 'Anonymous Pro', monospace;">
+
+            <div class="nav-toggle" id="nav-toggle-btn">
+                <div class="bar-1"></div>
+                <div class="bar-2"></div>
+                <div class="bar-3"></div>
+            </div>
+
+            <ul class="links-wrapper">
+                <li>
+                    <a href="../../index.html">
+                        <i class="fas fa-home"></i>
+                    </a>
+                </li>
+                <li>
+                    <a href="../../tools/index.html">
+                        Tools
+                    </a>
+                </li>
+                <li>
+                    <a href="../../portfolio/index.html"> WebDev </a>
+                </li>
+                <li>
+                    <a href="../index.html"> Blog </a>
+                </li>
+                <li><a href="../../contact/index.html"> About me </a></li>
+            </ul>
+                </div>
+            </div>
+        </nav>
+
+    <main style="background-color: #0F1035;">
+        <a class="help back-link" href="../index.html">&larr; Back to Blog</a>
+        <article class="article">
+            <h1 class="shadow-pop-bl" style="display:inline-block; padding: 0.3em 0.6em;">The Google Supremacy, Inside the Largest Private Network on Earth</h1>
+            <p class="subtitle">B4, Espresso, Colossus, Spanner, and why Europe needs a networking awakening.</p>
+
+            <p>Most people describe Google as a search engine that also does email and video. That description stopped being accurate around the time Google started laying its own undersea cables. What Google actually operates today is one of the largest privately built and privately controlled networks on the planet, a stack of infrastructure most nation states would call a national project. This post looks at four of the systems that make that stack work, and at what it means that a single company runs them better than most governments run their own telecom infrastructure.</p>
+
+            <h2>B4, a WAN that behaves like a supercomputer interconnect</h2>
+            <p>Traditional wide area networks are over-provisioned for failure, running at thirty to forty percent utilization on average because nobody trusts the network enough to push it further. Google's answer, described publicly in a well known 2013 paper, is B4: a software defined backbone connecting its data centers, built on commodity switches and a centralized traffic engineering controller instead of standard distributed routing protocols. Because the controller sees the whole graph at once, B4 pushes link utilization close to full capacity and reroutes around failures in seconds. This is the network carrying replication traffic between data centers, and by most public accounts its internal volume rivals or exceeds the traffic Google serves to the public internet.</p>
+
+            <h2>Espresso, software defined control at the edge of the internet</h2>
+            <p>B4 solved the inside of the network. Espresso solves the edge, the point where Google's traffic actually leaves its own fabric and hits an ISP, a peering exchange, or a subsea cable landing station. Instead of relying on static BGP policy, Espresso lets Google pick the exit point and even the source data center per user, per session, based on live measurements of application performance. It is software defined networking pushed all the way to the boundary most operators still treat as fixed geography, and it is a big part of why a Google service often loads faster than a competitor hosted on rented cloud infrastructure with none of that edge control.</p>
+
+            <h2>Colossus, storage without a horizon</h2>
+            <p>Underneath nearly every Google service sits Colossus, the successor to the original Google File System. Where GFS ran on a single metadata master and topped out around low petabyte scale, Colossus shards its metadata across many servers and operates at exabyte scale, self-healing through continuous re-replication whenever a disk or a rack disappears. It is the boring, invisible layer, and it is also the reason none of the systems above it ever have to think about running out of room.</p>
+
+            <h2>Spanner, buying certainty with atomic clocks</h2>
+            <p>The hardest problem in a globally distributed database is agreeing on the order of events across continents faster than light allows for a simple answer. Spanner's solution is TrueTime, an API backed by atomic clocks and GPS receivers installed in every Google data center, bounding clock uncertainty to a few milliseconds worldwide. That bound lets Spanner offer externally consistent transactions across the globe, a guarantee few banks, and fewer governments, run anything comparable to in production.</p>
+
+            <h2>Chrome, the access layer nobody votes on</h2>
+            <p>All of this infrastructure would matter less without a way to reach the end user, and that is what Chrome provides. Combined with Android on mobile, Google controls the client software running on most of the planet's connected devices, which means it also controls how quickly new web standards, new security mechanisms, and new performance techniques actually reach users. A protocol Google wants adopted tends to get adopted, because it ships the browser that renders it.</p>
+
+            <h2>Bigger than Orange plus Deutsche Telekom</h2>
+            <p>Put the pieces side by side against Europe's own telecom giants. Orange operates across roughly two dozen countries and serves around two hundred and eighty million customers, Deutsche Telekom covers a comparable footprint across Europe and the United States through T-Mobile. Both are real, serious infrastructure operators. But measured in privately owned submarine cable capacity, Google is one of the largest single investors on Earth, with cables like Curie, Dunant, Equiano and Grace Hopper connecting its own data centers directly, a role historically reserved for telecom consortiums or state actors. Layer B4, Espresso, Colossus and Spanner on top of that fiber, and the resulting footprint, purpose built and controlled end to end, outclasses what either European incumbent runs outside its home turf, where they still lease capacity and interconnect through someone else's exchange.</p>
+
+            <h2>Ahead of most governments too</h2>
+            <p>None of this is a claim that Google outguns a state's actual power. It is a narrower claim about operational sophistication. Most national telecom regulators and infrastructure ministries plan in multi year procurement cycles and inherited legacy networks. Google iterates continuously on a live global fabric it owns outright, coordinates traffic engineering across an entire continent-spanning backbone from a single control plane, and synchronizes clocks across data centers tighter than most national timing infrastructure. In pure engineering terms, day to day, few government-run networks operate at this level of coordination.</p>
+
+            <h2>Where does that leave Europe</h2>
+            <p>Honestly, smaller. Europe has no hyperscaler of its own, depends on AWS, Azure and Google Cloud for the bulk of its compute, and runs its mobile ecosystem on Android and iOS with no serious European alternative in either. There is no European search engine at meaningful scale, and no European CDN or private backbone anywhere near this size. That gap is real and it is worth saying plainly instead of dressing it up.</p>
+            <p>But there is a case for hope, and it deserves the same honesty. OVHcloud is a real sovereign cloud contender, Mistral AI proved Europe can still produce frontier research at speed, EuroHPC is putting some of the world's fastest supercomputers on the continent, and Gaia-X keeps pushing the sovereignty conversation even when it moves slowly. None of that adds up to a B4 or a Spanner yet. What it does prove is that the talent and the ambition exist, the missing piece is sustained investment in the unglamorous layers, fiber, data centers, and distributed systems research, the same layers Google spent two decades quietly building while everyone was watching the search box. Europe does not need to copy Google. It needs to decide, finally, that owning its own network fabric is worth the decade it would take to build. That decision is the awakening this continent still owes itself.</p>
+        </article>
+    </main>
+
+	<footer class="theme-dark text-center-desktop text-center-mobile">
+		<h2>Gaspard TORTERAT--SLANDA</h2>
+		<h3>Computer science enthusiast</h3>
+		<ul class="footer-links">
+			<li><a href="../../index.html"><i class="fas fa-home"></i></a></li>
+			<li><a href="../../portfolio/index.html">Portfolio</a></li>
+            <li><a href="../../contact/index.html">Contact</a></li>
+		</ul>
+		<ul class="footer-icons">
+			<li><a href="https://www.linkedin.com/in/gaspard-torterat-slanda-393046263/" target="_blank"><i class="fab fa-linkedin"></i></a></li>
+			<li><a href="https://github.com/Gaspardcode" target="_blank"><i class="fab fa-github-square"></i></a></li>
+		</ul>
+		<p class="privacy"><a href="../../privacy.html">Privacy &amp; Legal</a></p>
+	</footer>
+    <script src="https://lunevedy.com/assets/js/lunevedy.js"></script>
+
+</body>
+</html>

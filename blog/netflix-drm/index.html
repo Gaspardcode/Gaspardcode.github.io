@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>How Netflix Protects Its Content Inside Your Browser | Blog</title>
+    <meta name="description" content="EME, Widevine, license rotation, HDCP output protection and forensic watermarking, the layers standing between a stream and a pirated copy.">
+
+    <!--Favicon-->
+    <link rel="apple-touch-icon" sizes="180x180" href="../../assets/img/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="../../assets/img/favi-32-no-bg.png">
+    <link rel="manifest" href="../../assets/img/site.webmanifest">
+
+	<!-- Stylesheets -->
+    <link rel="stylesheet" href="https://lunevedy.com/assets/2.0/css/lunevedy.min.css" />
+    <link rel="stylesheet" href="../../assets/css/custom.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" integrity="sha512-9usAa10IRO0HhonpyAIVpjrylPvoDwiPUiKdWk5t3PyolY1cOd4DSE0Ga+ri4AuTroPR5aQvXU9xC6qOPnzFeg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+
+	<!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Anonymous+Pro:ital,wght@0,400;0,700;1,400;1,700&display=swap" rel="stylesheet">
+
+    <style>
+        .article {
+            max-width: 760px;
+            margin: 0 auto;
+            padding: 3rem 1.5rem 4rem;
+            text-align: left;
+            color: white;
+            line-height: 1.7;
+        }
+        .article h1 {
+            text-align: center;
+            margin-bottom: 0.5rem;
+        }
+        .article .subtitle {
+            text-align: center;
+            color: rgba(220, 242, 241, 0.65);
+            margin-bottom: 2.5rem;
+        }
+        .article h2 {
+            margin-top: 2.2rem;
+            margin-bottom: 0.8rem;
+            color: #7FC7D9;
+        }
+        .article p {
+            margin-bottom: 1.1rem;
+        }
+        .article ul {
+            margin: 0 0 1.1rem 1.4rem;
+            list-style: disc;
+        }
+        .article li {
+            margin-bottom: 0.5rem;
+        }
+        .article strong {
+            color: #7FC7D9;
+        }
+        .article a.help {
+            text-decoration: underline;
+        }
+        .back-link {
+            display: block;
+            max-width: 760px;
+            margin: 0 auto;
+            padding: 1.5rem 1.5rem 0;
+        }
+    </style>
+
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-L739GS6HS6"></script>
+    <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-L739GS6HS6');
+    </script>
+
+</head>
+<body>
+
+    <!-- NAVIGATION -->
+    <nav class="theme-dark"><div class="container-menu">
+        <a href="#" class="brand">
+            <img class ="logo" src="../../assets/img/logo.png" width="400" height="400" alt="Sample website logo">
+        </a>
+
+        <div class="container-menu-links" style="font-family: 'Anonymous Pro', monospace;">
+
+            <div class="nav-toggle" id="nav-toggle-btn">
+                <div class="bar-1"></div>
+                <div class="bar-2"></div>
+                <div class="bar-3"></div>
+            </div>
+
+            <ul class="links-wrapper">
+                <li>
+                    <a href="../../index.html">
+                        <i class="fas fa-home"></i>
+                    </a>
+                </li>
+                <li>
+                    <a href="../../tools/index.html">
+                        Tools
+                    </a>
+                </li>
+                <li>
+                    <a href="../../portfolio/index.html"> WebDev </a>
+                </li>
+                <li>
+                    <a href="../index.html"> Blog </a>
+                </li>
+                <li><a href="../../contact/index.html"> About me </a></li>
+            </ul>
+                </div>
+            </div>
+        </nav>
+
+    <main style="background-color: #0F1035;">
+        <a class="help back-link" href="../index.html">&larr; Back to Blog</a>
+        <article class="article">
+            <h1 class="shadow-pop-bl" style="display:inline-block; padding: 0.3em 0.6em;">How Netflix Protects Its Content Inside Your Browser</h1>
+            <p class="subtitle">EME, Widevine, license rotation, HDCP output protection and forensic watermarking.</p>
+
+            <p>Streaming a movie means sending valuable content to a machine you do not control. The browser is the perfect example of a hostile client: open source, scriptable, and running on hardware the studio never approved. Netflix still has to trust it enough to decode several gigabytes of video every episode. Here is the stack that makes that possible.</p>
+
+            <h2>Encrypted Media Extensions</h2>
+            <p>The starting point is a W3C standard called EME, Encrypted Media Extensions. It is a small JavaScript API that lets the Netflix player ask the browser to decrypt and render a video stream without the decrypted bytes or the key ever touching page script. The player only sees encrypted chunks going in and pixels coming out on a video element it cannot read from.</p>
+
+            <h2>The Content Decryption Module</h2>
+            <p>EME itself does no decryption. It hands the work to a Content Decryption Module, a CDM, supplied by the browser vendor rather than Netflix. Chrome ships Widevine, Edge and old IE ship PlayReady, Safari ships FairPlay. Each CDM is a closed binary, often backed by a Trusted Execution Environment or a dedicated hardware decoder on supported devices. Netflix never writes decryption code itself, it just negotiates with whichever CDM the browser exposes.</p>
+
+            <h2>Getting a license</h2>
+            <p>Before playback starts, the player generates a license request tied to a device certificate and sends it to Netflix's license server. The server checks the device's security level, issues a short lived license containing the content keys, and the CDM stores that license in memory only, scoped to the current session. Keys rotate per segment, so a leaked key from one chunk is useless for the next one, and the license itself expires quickly enough that replaying an old request does not work.</p>
+
+            <h2>Security levels and output protection</h2>
+            <p>Widevine defines three tiers. L1 does key handling and video processing entirely in hardware, so nothing decrypted ever appears in regular RAM, and Netflix reserves this tier for full 4K and HDR. L2 keeps keys in a trusted zone but processes video in software. L3 is pure software with no hardware backing, and Netflix caps it around 720p since it is the easiest tier to attack. On top of that, HDCP is negotiated over HDMI or DisplayPort to refuse a decrypted signal to any external display or capture card that will not confirm it is encrypted downstream too.</p>
+
+            <h2>The layers on top of DRM</h2>
+            <p>DRM covers the pipe from server to screen, but Netflix stacks a few more obstacles around it. The player bundle is heavily obfuscated and rebuilt often, so reverse engineering the JavaScript side stays expensive. Forensic watermarking embeds an invisible, per session identifier into the decoded frames themselves, so a screen recording leaked online can be traced back to the account or press screener it came from, independent of DRM entirely. Screenshot and screen recording APIs are blocked wherever the OS allows it, which is why a captured Netflix window often shows up black.</p>
+
+            <h2>None of it is unbreakable</h2>
+            <p>Every part of this stack has been defeated at some point, L3 CDMs have been extracted and analyzed, license flows have been reverse engineered. DRM does not aim for perfection, it aims to raise the cost of piracy above the cost of just paying for the subscription. Combined with watermarking as a deterrent for the cases that do slip through, that is the actual goal, not an unbreakable vault.</p>
+        </article>
+    </main>
+
+	<footer class="theme-dark text-center-desktop text-center-mobile">
+		<h2>Gaspard TORTERAT--SLANDA</h2>
+		<h3>Computer science enthusiast</h3>
+		<ul class="footer-links">
+			<li><a href="../../index.html"><i class="fas fa-home"></i></a></li>
+			<li><a href="../../portfolio/index.html">Portfolio</a></li>
+            <li><a href="../../contact/index.html">Contact</a></li>
+		</ul>
+		<ul class="footer-icons">
+			<li><a href="https://www.linkedin.com/in/gaspard-torterat-slanda-393046263/" target="_blank"><i class="fab fa-linkedin"></i></a></li>
+			<li><a href="https://github.com/Gaspardcode" target="_blank"><i class="fab fa-github-square"></i></a></li>
+		</ul>
+		<p class="privacy"><a href="../../privacy.html">Privacy &amp; Legal</a></p>
+	</footer>
+    <script src="https://lunevedy.com/assets/js/lunevedy.js"></script>
+
+</body>
+</html>

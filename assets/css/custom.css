@@ -382,5 +382,16 @@ main  .a {
  /* CSS-only info box on hover end */
 
  .hover-icon:hover {
-    box-shadow: 0 8px 16px #365486;  
+    box-shadow: 0 8px 16px #365486;
+ }
+
+ .col-4 ul .badge {
+    display: inline-block;
+    margin: 6px 6px 0;
+    vertical-align: middle;
+    white-space: nowrap;
+ }
+
+ .col-4 ul .badge i {
+    margin-right: 6px;
  }

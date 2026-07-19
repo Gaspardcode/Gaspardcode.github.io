@@ -14,7 +14,7 @@
     -->
 
 	<!-- Stylesheets -->
-    <link rel="stylesheet" href="https://lunevedy.com/assets/2.0/css/lunevedy.min.css" />
+    <link rel="stylesheet" href="../../assets/vendor/lunevedy/lunevedy.min.css" />
     <link rel="stylesheet" href="../../assets/css/custom.css" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"> 
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" integrity="sha512-9usAa10IRO0HhonpyAIVpjrylPvoDwiPUiKdWk5t3PyolY1cOd4DSE0Ga+ri4AuTroPR5aQvXU9xC6qOPnzFeg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
@@ -25,8 +25,6 @@
     <link href="https://fonts.googleapis.com/css2?family=Anonymous+Pro:ital,wght@0,400;0,700;1,400;1,700&display=swap" rel="stylesheet">
 
     <style>
-        header .col-text h2 { line-height: 1.8 }
-        .col-1 > h3 { line-height: 1.8 } 
         #maze-container {
             display: flex;
             flex-direction: column;
@@ -55,31 +53,6 @@
         }
         .color-box.selected {
             border: 2px solid #000;
-        }
-        .controls button {
-            background-color:#777777; /* Couleur de fond par défaut */
-            color: white; /* Couleur du texte */
-            border: none;
-            padding: 10px 20px;
-            margin: 5px;
-            border-radius: 5px;
-            font-size: 16px;
-            cursor: pointer;
-            transition: background-color 0.3s ease, transform 0.3s ease;
-            font-family: 'Anonymous Pro', sans-serif;
-        }
-        .controls button:hover {
-            background-color: #444444; /* Couleur de fond au survol */
-            transform: scale(1.05); /* Légère augmentation de la taille */
-            box-shadow: 0 6px 8px rgba(0, 0, 0, 0.15); /* Ombre plus prononcée au survol */
-        }
-        .controls button:active {
-            transform: scale(0.95); /* Réduit légèrement la taille */
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2); /* Réduit l'ombre */
-        }
-        .col-1-badge {
-            background-color: #DCF2F1;
-            color: #0F1035;
         }
     </style>
     
@@ -124,6 +97,9 @@
                 </li>
                 <li>
                     <a href="../../portfolio/index.html"> Webdev </a>
+                </li>
+                <li>
+                    <a href="../../projects/index.html"> Projects </a>
                 </li>
                 <li><a href="../../contact/index.html"> About me </a></li>
             </ul>
@@ -206,7 +182,7 @@
 		</ul>
 		<p class="privacy"><a href="privacy.html">Privacy &amp; Legal</a></p>
 	</footer>
-    <script src="https://lunevedy.com/assets/js/lunevedy.js"></script>
+    <script src="../../assets/vendor/lunevedy/lunevedy.js"></script>
 
 </body>
 </html>

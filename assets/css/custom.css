@@ -286,10 +286,11 @@ main  .a {
 }
 
 .section-selector-1.theme-light .cols-shadows .col-4 { box-shadow: rgba(0, 0, 0, 0.2) 7px 7px 7px 0px}
-.section-selector-4.theme-dark { background:linear-gradient(to right,var(--steel-500),var(--sky-300)); }
+.section-selector-4.theme-dark { background:linear-gradient(to right,var(--navy-950),var(--navy-800)); }
 .section-selector-4 .col-4 li::marker,
-.section-selector-4 .col-4 ul.fa-ul li span.fa-li i { color: var(--gray-400) }
-.section-selector-4.theme-dark .cols-background .col-4 { background-color: var(--sky-500) }
+.section-selector-4 .col-4 ul.fa-ul li span.fa-li i { color: var(--sky-300) }
+.section-selector-4.theme-dark .cols-background .col-4 { background-color: var(--navy-800); border: 1px solid var(--steel-500); }
+.section-selector-4.theme-dark .col-4 h3 { color: var(--pale-100); }
 
 /* CSS-only info box on hover
  * Ken Sparby, @kensparby */
@@ -395,3 +396,45 @@ main  .a {
  .col-4 ul .badge i {
     margin-right: 6px;
  }
+
+/* Blog article layout, shared by every long-form post under blog/ */
+.article {
+    max-width: 760px;
+    margin: 0 auto;
+    padding: 3rem 1.5rem 4rem;
+    text-align: left;
+    color: white;
+    line-height: 1.7;
+}
+.article h1 { text-align: center; margin-bottom: 0.5rem; }
+.article .subtitle { text-align: center; color: rgba(220, 242, 241, 0.65); margin-bottom: 2.5rem; }
+.article h2 { margin-top: 2.2rem; margin-bottom: 0.8rem; color: #7FC7D9; }
+.article p { margin-bottom: 1.1rem; }
+.article ul { margin: 0 0 1.1rem 1.4rem; list-style: disc; }
+.article li { margin-bottom: 0.5rem; }
+.article strong { color: #7FC7D9; }
+.article a.help { text-decoration: underline; }
+.back-link { display: block; max-width: 760px; margin: 0 auto; padding: 1.5rem 1.5rem 0; }
+
+/* Shared canvas control buttons, used by games/maze and games/matrix_det */
+.controls button {
+    background-color: #777777;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    margin: 5px;
+    border-radius: 5px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.3s ease;
+    font-family: 'Anonymous Pro', sans-serif;
+}
+.controls button:hover {
+    background-color: #444444;
+    transform: scale(1.05);
+    box-shadow: 0 6px 8px rgba(0, 0, 0, 0.15);
+}
+.controls button:active {
+    transform: scale(0.95);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}

@@ -15,12 +15,16 @@
 .container-menu a#btn-cta:hover,
 .container-menu a#btn-cta:active { border-color: var(--blue-400) }
 
-header.hero-block-js { 
+header.hero-block-js {
+    background: linear-gradient(to left,#0fdae1,#aee2ef);
     min-height: 200px !important;
     padding-top: 42px;
     padding-bottom: 24px;
     text-align: left;
 }
+
+header.hero-block-js h1 { color: #222 }
+header.hero-block-js h2 { color: var(--gray-700) }
 
 header.hero-block-js .hero-text-container { padding: 0 12% 2% 9% }   
 

@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gaspard TORTERAT | Projects</title>
+    <meta name="description" content="A live list of my public GitHub repositories, fetched straight from the GitHub API.">
+
+    <!-- Favicon -->
+    <link rel="apple-touch-icon" sizes="180x180" href="../assets/img/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="../assets/img/favi-32-no-bg.png">
+    <link rel="manifest" href="../assets/img/site.webmanifest">
+
+	<!-- Stylesheets -->
+    <link rel="stylesheet" href="../assets/vendor/lunevedy/lunevedy.min.css" />
+    <link rel="stylesheet" href="../assets/css/custom.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" integrity="sha512-9usAa10IRO0HhonpyAIVpjrylPvoDwiPUiKdWk5t3PyolY1cOd4DSE0Ga+ri4AuTroPR5aQvXU9xC6qOPnzFeg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+
+	<!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Anonymous+Pro:ital,wght@0,400;0,700;1,400;1,700&display=swap" rel="stylesheet">
+
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-L739GS6HS6"></script>
+    <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-L739GS6HS6');
+    </script>
+
+    <style>
+        header .col-text h2 { line-height: 1.8 }
+        .col-1 > h3 { line-height: 1.8 }
+
+        .repo-list {
+            list-style: none;
+            margin: 0;
+            padding: 0;
+            text-align: left;
+        }
+        .repo-item {
+            display: flex;
+            flex-direction: column;
+            gap: 0.35rem;
+            padding: 1.1rem 0;
+            border-bottom: 1px solid rgba(220, 242, 241, 0.15);
+        }
+        .repo-item:first-child { padding-top: 0.2rem; }
+        .repo-item:last-child { border-bottom: none; }
+        .repo-title {
+            display: flex;
+            align-items: baseline;
+            gap: 0.6rem;
+            flex-wrap: wrap;
+        }
+        .repo-title a {
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: var(--pale-100);
+            text-decoration: none;
+            cursor: pointer;
+        }
+        .repo-title a:hover { text-decoration: underline; }
+        .repo-fork-tag {
+            font-size: 0.7rem;
+            color: var(--sky-300);
+            border: 1px solid var(--sky-300);
+            border-radius: 999px;
+            padding: 0.05rem 0.5rem;
+        }
+        .repo-desc {
+            color: var(--pale-100);
+            opacity: 0.85;
+            margin: 0;
+        }
+        .repo-meta {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1.1rem;
+            font-size: 0.85rem;
+            color: var(--sky-300);
+        }
+        .repo-meta span { display: inline-flex; align-items: center; gap: 0.35rem; }
+        .repo-lang-dot {
+            width: 0.6rem;
+            height: 0.6rem;
+            border-radius: 50%;
+            background: var(--sky-300);
+            display: inline-block;
+        }
+        #gh-status {
+            color: var(--pale-100);
+            opacity: 0.8;
+        }
+        #gh-status.error { color: #ff8a8a; opacity: 1; }
+    </style>
+</head>
+<body>
+
+    <!-- menu and 'hero block' header -->
+    <nav class="theme-dark"><div class="container-menu">
+        <a href="../index.html" class="brand">
+            <img class ="logo" src="../assets/img/logo.png" width="400" height="400" alt="Sample website logo">
+        </a>
+
+        <div class="container-menu-links" style="font-family: 'Anonymous Pro', monospace;">
+
+            <div class="nav-toggle" id="nav-toggle-btn">
+                <div class="bar-1"></div>
+                <div class="bar-2"></div>
+                <div class="bar-3"></div>
+            </div>
+
+            <ul class="links-wrapper">
+                <li>
+                    <a href="../index.html">
+                        <i class="fas fa-home"></i>
+                    </a>
+                </li>
+                <li>
+                    <a href="../games/index.html">
+                        Tools
+                    </a>
+                </li>
+                <li>
+                    <a href="../blog/index.html"> Blog </a>
+                </li>
+                <li>
+                    <a href="#"> Projects </a>
+                </li>
+                <li><a href="../contact/index.html"> About me </a></li>
+            </ul>
+                </div>
+            </div>
+        </nav>
+
+        <header class="theme-dark cols-2-half text-center-mobile custom">
+            <div class="col-2 col-text">
+                <div class="badge not-allowed">Projects</div>
+                <h2 class="shadow-pop-bl">
+                    <i style="color:white;">&lt;/&gt; GitHub Projects</i>
+                </h2>
+                <h4 style="color:white">Live list of my public repositories, pulled straight from the GitHub API.</h4>
+            </div>
+            <div class="col-2 col-visual">
+                <figure></figure>
+            </div>
+        </header>
+
+    <main>
+        <section class="w-1356px back_black section-selector-4">
+            <div class="col-1 w-820px text-center">
+                <div class="col-1-badge" style="background-color: #DCF2F1; color: #0F1035;">
+                    <a href="https://github.com/Gaspardcode" target="_blank" style="color: inherit; text-decoration: none;">github.com/Gaspardcode</a>
+                </div>
+                <div class="cols-1 text-center">
+                    <p id="gh-status">Loading repositories…</p>
+                    <ul class="repo-list" id="repo-list"></ul>
+                </div>
+            </div>
+        </section>
+    </main>
+
+	<footer class="theme-dark text-center-desktop text-center-mobile">
+		<h2>Gaspard TORTERAT--SLANDA</h2>
+		<h3>Computer science enthusiast</h3>
+		<ul class="footer-links">
+			<li><a href="../index.html"><i class="fas fa-home"></i></a></li>
+			<li><a href="../portfolio/index.html">Portfolio</a></li>
+            <li><a href="../contact/index.html">Contact</a></li>
+		</ul>
+		<ul class="footer-icons">
+			<li><a href="https://www.linkedin.com/in/gaspard-torterat-slanda-393046263/" target="_blank"><i class="fab fa-linkedin"></i></a></li>
+			<li><a href="https://github.com/Gaspardcode" target="_blank"><i class="fab fa-github-square"></i></a></li>
+		</ul>
+		<p class="privacy"><a href="../privacy.html">Privacy &amp; Legal</a></p>
+	</footer>
+
+    <script src="../assets/vendor/lunevedy/lunevedy.js"></script>
+
+    <script>
+    (function () {
+        var GITHUB_USER = 'Gaspardcode';
+        var status = document.getElementById('gh-status');
+        var list = document.getElementById('repo-list');
+
+        function timeAgo(dateStr) {
+            var seconds = Math.floor((Date.now() - new Date(dateStr)) / 1000);
+            var units = [
+                ['year', 31536000], ['month', 2592000], ['week', 604800],
+                ['day', 86400], ['hour', 3600], ['minute', 60]
+            ];
+            for (var i = 0; i < units.length; i++) {
+                var value = Math.floor(seconds / units[i][1]);
+                if (value >= 1) return value + ' ' + units[i][0] + (value > 1 ? 's' : '') + ' ago';
+            }
+            return 'just now';
+        }
+
+        function renderRepos(repos) {
+            list.innerHTML = '';
+            repos.forEach(function (repo) {
+                var li = document.createElement('li');
+                li.className = 'repo-item reveal-line';
+
+                var title = document.createElement('div');
+                title.className = 'repo-title';
+
+                var link = document.createElement('a');
+                link.href = repo.html_url;
+                link.target = '_blank';
+                link.rel = 'noopener noreferrer';
+                link.className = 'help';
+                link.textContent = repo.name;
+                title.appendChild(link);
+
+                if (repo.fork) {
+                    var tag = document.createElement('span');
+                    tag.className = 'repo-fork-tag';
+                    tag.textContent = 'fork';
+                    title.appendChild(tag);
+                }
+                li.appendChild(title);
+
+                if (repo.description) {
+                    var desc = document.createElement('p');
+                    desc.className = 'repo-desc';
+                    desc.textContent = repo.description;
+                    li.appendChild(desc);
+                }
+
+                var meta = document.createElement('div');
+                meta.className = 'repo-meta';
+
+                if (repo.language) {
+                    var lang = document.createElement('span');
+                    lang.innerHTML = '<span class="repo-lang-dot"></span>' + repo.language;
+                    meta.appendChild(lang);
+                }
+
+                var stars = document.createElement('span');
+                stars.innerHTML = '<i class="fas fa-star"></i> ' + repo.stargazers_count;
+                meta.appendChild(stars);
+
+                var updated = document.createElement('span');
+                updated.innerHTML = '<i class="fas fa-clock"></i> updated ' + timeAgo(repo.pushed_at);
+                meta.appendChild(updated);
+
+                li.appendChild(meta);
+                list.appendChild(li);
+            });
+        }
+
+        fetch('https://api.github.com/users/' + GITHUB_USER + '/repos?sort=pushed&per_page=100&type=owner')
+            .then(function (res) {
+                if (!res.ok) throw new Error('GitHub API responded with ' + res.status);
+                return res.json();
+            })
+            .then(function (repos) {
+                if (!Array.isArray(repos) || repos.length === 0) {
+                    status.textContent = 'No public repositories found.';
+                    return;
+                }
+                status.remove();
+                renderRepos(repos);
+            })
+            .catch(function (err) {
+                status.className = 'error';
+                status.textContent = 'Could not load repositories from GitHub (' + err.message + '). ' +
+                    'You can browse them directly on ';
+                var link = document.createElement('a');
+                link.href = 'https://github.com/' + GITHUB_USER;
+                link.target = '_blank';
+                link.className = 'help';
+                link.textContent = 'github.com/' + GITHUB_USER;
+                status.appendChild(link);
+                status.appendChild(document.createTextNode('.'));
+            });
+    })();
+    </script>
+
+</body>
+</html>

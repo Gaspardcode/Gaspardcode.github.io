@@ -4,8 +4,8 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CRLSets and Certificate Revocation: What Browsers Actually Check | Blog</title>
-    <meta name="description" content="Why online revocation checking was abandoned, what Chrome CRLSets and Mozilla CRLite do instead, and why short-lived certificates change the question.">
+    <title>35,000 of 4 Million: CRLSets, Bloom Filters and the Revocation Gap | Blog</title>
+    <meta name="description" content="Chrome's CRLSet covers roughly 1% of revoked certificates. How Bloom filters and their successors let Firefox cover all of them, and why short-lived certificates change the question.">
 
     <!--Favicon-->
     <link rel="apple-touch-icon" sizes="180x180" href="../../assets/img/apple-touch-icon.png">
@@ -76,8 +76,8 @@
         <a class="help back-link" href="../index.html">&larr; Back to Blog</a>
         <article class="article">
 
-            <h1 class="shadow-pop-bl" style="display:inline-block; padding: 0.3em 0.6em;">CRLSets and Certificate Revocation: What Browsers Actually Check</h1>
-            <p class="subtitle">Why revocation checking was abandoned online, what Chrome's CRLSets and Mozilla's CRLite do instead, and why short-lived certificates change the question.</p>
+            <h1 class="shadow-pop-bl" style="display:inline-block; padding: 0.3em 0.6em;">35,000 of 4 Million: CRLSets, Bloom Filters and the Revocation Gap</h1>
+            <p class="subtitle">Chrome's CRLSet covers roughly 1% of revoked certificates. Here is why, how Bloom filters (and their successors) let Firefox cover all of them, and why short-lived certificates change the question.</p>
 
             <p>A certificate is a promise that lasts until its expiry date. Sometimes you need to break that promise early: the private key leaked, the CA issued it by mistake, the domain changed hands. The mechanism for that is revocation, and it is the part of the web PKI that works the least well. This article explains why browsers stopped asking CAs about revocation in real time, what Chrome's <strong>CRLSets</strong> do in its place, and how the small internal CA I run at home sidesteps the whole problem.</p>
 
@@ -91,7 +91,8 @@
             <p>That last question is the one that broke it. Browsers chose <strong>soft-fail</strong>: if the revocation server does not answer, assume the certificate is fine, because otherwise a CA outage would take half the web down. But an attacker who can intercept your traffic well enough to use a stolen key can also drop the OCSP request. Soft-fail therefore protects against nothing in exactly the situation where you need it. Revocation checking that an attacker can switch off by blocking a request is, as security people say, a speed bump.</p>
 
             <h2>CRLSets: a curated list pushed to the browser</h2>
-            <p>Chrome's answer is the <strong>CRLSet</strong>. Instead of asking a CA at connection time, Chrome receives a small list of revoked certificates through its own update channel, in the background, like any other component. The list is compact and chosen by Google: it is built from the CRLs that CAs publish, but it is deliberately <em>not</em> complete. It has a size cap of a few hundred kilobytes, so it keeps what matters most, such as revoked intermediates and entries flagged for security reasons, and drops what does not fit.</p>
+            <p>Chrome's answer is the <strong>CRLSet</strong>. Instead of asking a CA at connection time, Chrome receives a small list of revoked certificates through its own update channel, in the background, like any other component. The list is compact and chosen by Google: it is built from the CRLs that CAs publish, but it is deliberately <em>not</em> complete. Chromium's documentation states a size limit of 250 KB, and it describes how entries are picked: only revocations with no reason code, or with a reason such as key compromise or CA compromise, are included, and CRLs covering intermediates and EV certificates are taken in preference.</p>
+            <p>How much does that fit? Mozilla, which has every reason to measure it, reports in its 2025 post on CRLite that Chrome's CRLSet is about 600 kB a day and holds roughly <strong>35,000 revocations</strong>. The web has about <strong>4 million</strong> revoked certificates at any time. That is around <strong>1%</strong>. (Those figures come from a competitor and describe 2025; Chromium's own page does not state an entry count, and its 250 KB limit differs from the size Mozilla observed, so treat both as orders of magnitude.)</p>
             <p>The consequences are worth spelling out:</p>
             <ul>
                 <li><strong>No connection-time cost.</strong> The check is a local lookup against data already on your machine. No latency, nothing leaked to a CA.</li>
@@ -99,10 +100,13 @@
                 <li><strong>But it is partial.</strong> A revoked ordinary site certificate may simply not be in the list. CRLSets are a fast emergency brake, not a full revocation database.</li>
                 <li><strong>The freshness depends on updates.</strong> A browser that is offline or not updating components has an old list.</li>
             </ul>
-            <p>The size problem has a history: mass revocations, the best-known being the aftermath of the Heartbleed bug in 2014, produced far more revoked certificates than a list this small could ever hold. That event is much of why people stopped believing in revocation as a safety net.</p>
+            <p>The size problem has a history: mass revocations, the best-known being the aftermath of the Heartbleed bug in 2014, produced far more revoked certificates than a list this small can carry. That event is much of why people stopped believing in revocation as a safety net.</p>
 
-            <h2>CRLite and the other approach to completeness</h2>
-            <p>Mozilla went after the completeness problem instead. <strong>CRLite</strong> aggregates revocation data for the whole set of publicly logged certificates and encodes it in a data structure called a filter cascade, a stack of Bloom filters that gives exact answers for the certificates it was built from, at a size small enough to ship to every browser. The trade-off is the opposite of Chrome's: complete coverage, but it only knows certificates that appear in Certificate Transparency logs, and it is updated at the pace of the pipeline that builds it.</p>
+            <h2>Fitting 4 million revocations in a few hundred kilobytes</h2>
+            <p>Mozilla attacked the completeness problem instead. <strong>CRLite</strong> encodes <em>all</em> revocations, not a selection, and ships them to Firefox. According to Mozilla, that is about 300 kB of data per day plus a snapshot of roughly 4 MB every 45 days, against about 300 MB for the raw CRLs. It is enabled for desktop Firefox since version 137. The trick is a probabilistic data structure.</p>
+            <p>A <strong>Bloom filter</strong> answers "is this item in the set?" using a few bits per item. It can say "definitely not" or "probably yes". It never forgets an item it holds (no false negatives), but it sometimes claims to contain one it does not (false positives). For revocation that is the wrong way round if you use it naively: a false positive would mean wrongly rejecting a perfectly valid certificate.</p>
+            <p>CRLite's original design fixed this with a <strong>cascade</strong>. The first filter holds the revoked certificates. Every valid certificate that wrongly matches it, which Mozilla can enumerate because it knows the whole set of publicly logged certificates, goes into a second filter. The few revoked certificates that falsely match <em>that</em> one go into a third, and so on until nothing is left. Walk the levels and you get an exact answer for every certificate that was known when the cascade was built. The current implementation replaces the stack of Bloom filters with a two-level cascade of more compact <strong>Ribbon filters</strong> (the "Clubcards" design), which is why the numbers above are so small.</p>
+            <p>The trade-off is the mirror image of Chrome's: complete coverage and exactness, but only for certificates that appear in Certificate Transparency logs, and only as fresh as the pipeline that rebuilds it.</p>
             <p>OCSP stapling and the "Must-Staple" extension are a third path: the server fetches a signed OCSP response itself and presents it during the handshake, so the browser does not have to contact the CA. It fixes latency and privacy, but not the soft-fail problem unless the certificate says the staple is mandatory, and few sites ask for that.</p>
 
             <h2>The industry's real fix: make certificates expire sooner</h2>
@@ -121,9 +125,14 @@
             <ul>
                 <li>Online revocation checking was abandoned because soft-fail makes it useless against an active attacker.</li>
                 <li>CRLSets give Chrome a fast, private, local emergency list, at the cost of completeness.</li>
-                <li>CRLite aims at completeness through a compact cryptographic filter; stapling shifts the work to the server.</li>
+                <li>CRLite aims at completeness with a cascade of probabilistic filters (Bloom, now Ribbon); stapling shifts the work to the server.</li>
                 <li>The robust answer is shorter certificate lifetimes plus automation.</li>
                 <li>In a private PKI, combine short lifetimes, name constraints and an offline root, and revocation mostly stops being your problem.</li>
+            </ul>
+            <h2>Sources</h2>
+            <ul>
+                <li><a href="https://hacks.mozilla.org/2025/08/crlite-fast-private-and-comprehensive-certificate-revocation-checking-in-firefox/" target="_blank">Mozilla Hacks, CRLite: Fast, private, and comprehensive certificate revocation checking in Firefox (2025)</a></li>
+                <li><a href="https://chromium.googlesource.com/playground/chromium-org-site/+/refs/heads/main/Home/chromium-security/crlsets.md" target="_blank">Chromium, CRLSets</a></li>
             </ul>
         </article>
     </main>

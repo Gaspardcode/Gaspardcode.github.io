@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>What Terraform Remembers, and Why It's a Single Point of Failure | Blog</title>
+    <meta name="description" content="What the state file really is, why it holds secrets, how locking and remote backends work, and what drift looks like in a homelab.">
+
+    <!--Favicon-->
+    <link rel="apple-touch-icon" sizes="180x180" href="../../assets/img/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="../../assets/img/favi-32-no-bg.png">
+    <link rel="manifest" href="../../assets/img/site.webmanifest">
+
+	<!-- Stylesheets -->
+    <link rel="stylesheet" href="../../assets/vendor/lunevedy/lunevedy.min.css" />
+    <link rel="stylesheet" href="../../assets/css/custom.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" integrity="sha512-9usAa10IRO0HhonpyAIVpjrylPvoDwiPUiKdWk5t3PyolY1cOd4DSE0Ga+ri4AuTroPR5aQvXU9xC6qOPnzFeg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+
+	<!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Anonymous+Pro:ital,wght@0,400;0,700;1,400;1,700&display=swap" rel="stylesheet">
+
+
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-L739GS6HS6"></script>
+    <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-L739GS6HS6');
+    </script>
+
+</head>
+<body>
+
+    <!-- NAVIGATION -->
+    <nav class="theme-dark"><div class="container-menu">
+        <a href="#" class="brand">
+            <img class ="logo" src="../../assets/img/logo.png" width="400" height="400" alt="Sample website logo">
+        </a>
+
+        <div class="container-menu-links" style="font-family: 'Anonymous Pro', monospace;">
+
+            <div class="nav-toggle" id="nav-toggle-btn">
+                <div class="bar-1"></div>
+                <div class="bar-2"></div>
+                <div class="bar-3"></div>
+            </div>
+
+            <ul class="links-wrapper">
+                <li>
+                    <a href="../../index.html">
+                        <i class="fas fa-home"></i>
+                    </a>
+                </li>
+                <li>
+                    <a href="../../games/index.html">
+                        Tools
+                    </a>
+                </li>
+                <li>
+                    <a href="../index.html"> Blog </a>
+                </li>
+                <li>
+                    <a href="../../projects/index.html"> Projects </a>
+                </li>
+                <li><a href="../../contact/index.html"> About me </a></li>
+            </ul>
+                </div>
+            </div>
+        </nav>
+
+    <main style="background-color: #0F1035;">
+        <a class="help back-link" href="../index.html">&larr; Back to Blog</a>
+        <article class="article">
+            <h1 class="shadow-pop-bl" style="display:inline-block; padding: 0.3em 0.6em;">What Terraform Remembers, and Why It's a Single Point of Failure</h1>
+            <p class="subtitle">What the state file really is, why it holds secrets, how locking and remote backends work, and what drift looks like in a homelab.</p>
+
+            <p>Every Terraform tutorial spends ten minutes on providers, resources and variables, then mentions a file called <code>terraform.tfstate</code> in one sentence, usually followed by "don't touch it." That is roughly the same advice as "this button is important, please don't press it" printed next to the button that runs your whole infrastructure. I run a small homelab (a Proxmox VM hosting LXC containers and a k3s cluster) managed with Terraform, and the state file is the one piece I would be sorry to lose. So here is what it actually is, and how not to lose it.</p>
+
+            <h2>What the state is, and what it is not</h2>
+            <p>Your <code>.tf</code> files describe what you <em>want</em>. The real world, a hypervisor, a cloud account, is what <em>exists</em>. The state is the third thing: Terraform's memory of which real object corresponds to which block in your code. It is a JSON file that maps <code>proxmox_virtual_environment_vm.k3s</code> to "VM number 230 on this node", along with every attribute the provider returned when it created it.</p>
+            <p>That mapping is the whole point. Without it, Terraform has no way to know that the VM it sees is the one you declared. Run <code>plan</code> with an empty state and it will cheerfully propose to create everything again, next to what already exists. It is not a cache you can delete and regenerate: it is the only place that knows <em>which</em> real objects are yours.</p>
+
+            <h2>Why you must not commit it</h2>
+            <p>The state stores attribute values in clear text, including ones you marked <code>sensitive</code>. Marking a variable sensitive hides it from the plan output, not from the file. Passwords, generated keys, tokens and cloud-init content can all end up in there, readable by anyone who can read the file.</p>
+            <p>So the first rule is boring and absolute: the state goes in <code>.gitignore</code>. In my repo, <code>*.tfstate</code> and <code>*.tfstate.*</code> are ignored, and the file lives only on the server that runs <code>terraform apply</code>. The second rule follows from the first and is less comfortable: if it is not in git, it is not versioned, and if the disk dies, so does your mapping. A local state is a single point of failure that you chose by omission.</p>
+
+            <h2>The <code>.backup</code> file is not a backup strategy</h2>
+            <p>Next to <code>terraform.tfstate</code> you will find <code>terraform.tfstate.backup</code>. It is the previous version of the state, written just before each apply. It is handy when an apply goes wrong and you want to inspect what changed. It sits in the same directory, on the same disk, so it protects you from a bad apply and from nothing else. A real backup is a copy somewhere else, taken on a schedule, and restored at least once to check that it works.</p>
+
+            <h2>Locking: two applies, one state</h2>
+            <p>Terraform reads the state, computes a plan, applies it and writes the new state. If two runs overlap, say a CI job and you at your terminal, the second write silently overwrites the first and the state no longer matches reality. This is the classic way to corrupt it.</p>
+            <p>The local backend takes a lock for the duration of a run, which is enough while you are the only user on one machine. As soon as there are several people or a pipeline, you need a backend that supports locking across machines. If a run is killed halfway and leaves a stale lock, <code>terraform force-unlock</code> releases it, after you have checked that nothing is actually still running. Releasing a lock someone else holds is how you get the corruption the lock was there to prevent.</p>
+
+            <h2>Remote backends</h2>
+            <p>The usual answer to "where should the state live" is a remote backend: an object store with versioning turned on, encryption at rest, access limited to the identities that need it, and locking. On AWS that traditionally meant S3 plus a DynamoDB table for the lock. Recent Terraform versions can lock with a lock file in the bucket itself, so the extra table is no longer required. Terraform Cloud, GitLab and a few others offer managed alternatives.</p>
+            <p>The point of a remote backend is not fashion. It gives you three things the local file does not: a history of versions you can roll back to, a lock shared by everyone, and a state that survives the machine that created it. If you want encryption of the state itself and not just of the storage, OpenTofu supports it natively, which is a fair reason to look at it.</p>
+
+            <h2>Drift: when reality moves without telling Terraform</h2>
+            <p>Drift is the gap between the state and the real world. Someone resizes a VM in the web UI, a script changes a setting, a resource is deleted by hand. Terraform finds out at the next <code>plan</code>, when it refreshes the state from the provider and compares. <code>terraform plan -refresh-only</code> shows the differences without proposing to change anything, which is what you want when you suspect drift but are not ready to act on it.</p>
+            <p>In my homelab the virtual machine that hosts everything else is deliberately <em>outside</em> Terraform: I changed its memory and CPU count directly with libvirt tools. That is fine as long as it is a decision and not an accident, and as long as it is written down. Drift you chose is documentation. Drift you forgot is the thing that bites during a rebuild.</p>
+
+            <h2>Fixing the state without destroying anything</h2>
+            <p>You will eventually rename a resource or move it into a module, and Terraform will propose to destroy the old one and create a new one, because from its point of view the old address has disappeared. Do not accept that plan blindly. The tools for this are:</p>
+            <ul>
+                <li><strong><code>moved</code> blocks</strong> in your code, which tell Terraform that an address changed without touching the real object. They are reviewable in a pull request, which <code>terraform state mv</code> is not.</li>
+                <li><strong><code>import</code> blocks</strong> to bring an existing object under management instead of creating a duplicate.</li>
+                <li><strong><code>removed</code> blocks</strong> (or <code>terraform state rm</code>) to stop managing an object without destroying it.</li>
+            </ul>
+            <p>Prefer the declarative blocks over the manual commands: they live in git, and the plan shows what they will do before anything happens.</p>
+
+            <h2>When a provider waits for something that never comes</h2>
+            <p>One last lesson from the homelab, because state problems are not always about the file. One of my virtual machines does not run the QEMU guest agent, but the provider waits for the agent to report the machine's IP address. The result: every apply that touches that machine hangs for roughly fifteen minutes before giving up. The state was fine, the plan was fine, and the apply was slow for a reason that had nothing to do with either. The fix is either installing the agent at first boot or telling the provider not to wait. It is a good reminder that "Terraform is stuck" has more causes than the state file.</p>
+
+            <h2>A checklist you can steal</h2>
+            <ul>
+                <li>The state is in <code>.gitignore</code>, and it is not in any screenshot or gist either.</li>
+                <li>It is backed up somewhere other than the machine that runs Terraform, and you have restored a copy at least once.</li>
+                <li>With more than one person or pipeline, it lives in a remote backend with locking and versioning.</li>
+                <li>You run <code>plan</code> before every <code>apply</code>, and read the lines that say "destroy" and "replace."</li>
+                <li>Renames and moves go through <code>moved</code> blocks, not through a leap of faith.</li>
+                <li>Anything you deliberately manage outside Terraform is written down.</li>
+            </ul>
+            <p>The state file is not glamorous. Nobody ever put "managed the state well" on a conference slide. But it is the difference between "I can rebuild this from a repository" and "I hope the disk survives," and only one of those is a plan.</p>
+        </article>
+    </main>
+
+	<footer class="theme-dark text-center-desktop text-center-mobile">
+		<h2>Gaspard TORTERAT--SLANDA</h2>
+		<h3>Computer science enthusiast</h3>
+		<ul class="footer-links">
+			<li><a href="../../index.html"><i class="fas fa-home"></i></a></li>
+			<li><a href="../../portfolio/index.html">Portfolio</a></li>
+            <li><a href="../../contact/index.html">Contact</a></li>
+		</ul>
+		<ul class="footer-icons">
+			<li><a href="https://www.linkedin.com/in/gaspard-torterat-slanda-393046263/" target="_blank"><i class="fab fa-linkedin"></i></a></li>
+			<li><a href="https://github.com/Gaspardcode" target="_blank"><i class="fab fa-github-square"></i></a></li>
+		</ul>
+		<p class="privacy"><a href="../../privacy.html">Privacy &amp; Legal</a></p>
+	</footer>
+    <script src="../../assets/vendor/lunevedy/lunevedy.js"></script>
+
+</body>
+</html>

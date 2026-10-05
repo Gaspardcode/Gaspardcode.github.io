@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CRLSets and Certificate Revocation: What Browsers Actually Check | Blog</title>
+    <meta name="description" content="Why online revocation checking was abandoned, what Chrome CRLSets and Mozilla CRLite do instead, and why short-lived certificates change the question.">
+
+    <!--Favicon-->
+    <link rel="apple-touch-icon" sizes="180x180" href="../../assets/img/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="../../assets/img/favi-32-no-bg.png">
+    <link rel="manifest" href="../../assets/img/site.webmanifest">
+
+	<!-- Stylesheets -->
+    <link rel="stylesheet" href="../../assets/vendor/lunevedy/lunevedy.min.css" />
+    <link rel="stylesheet" href="../../assets/css/custom.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" integrity="sha512-9usAa10IRO0HhonpyAIVpjrylPvoDwiPUiKdWk5t3PyolY1cOd4DSE0Ga+ri4AuTroPR5aQvXU9xC6qOPnzFeg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+
+	<!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Anonymous+Pro:ital,wght@0,400;0,700;1,400;1,700&display=swap" rel="stylesheet">
+
+
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-L739GS6HS6"></script>
+    <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-L739GS6HS6');
+    </script>
+
+</head>
+<body>
+
+    <!-- NAVIGATION -->
+    <nav class="theme-dark"><div class="container-menu">
+        <a href="#" class="brand">
+            <img class ="logo" src="../../assets/img/logo.png" width="400" height="400" alt="Sample website logo">
+        </a>
+
+        <div class="container-menu-links" style="font-family: 'Anonymous Pro', monospace;">
+
+            <div class="nav-toggle" id="nav-toggle-btn">
+                <div class="bar-1"></div>
+                <div class="bar-2"></div>
+                <div class="bar-3"></div>
+            </div>
+
+            <ul class="links-wrapper">
+                <li>
+                    <a href="../../index.html">
+                        <i class="fas fa-home"></i>
+                    </a>
+                </li>
+                <li>
+                    <a href="../../games/index.html">
+                        Tools
+                    </a>
+                </li>
+                <li>
+                    <a href="../index.html"> Blog </a>
+                </li>
+                <li>
+                    <a href="../../projects/index.html"> Projects </a>
+                </li>
+                <li><a href="../../contact/index.html"> About me </a></li>
+            </ul>
+                </div>
+            </div>
+        </nav>
+
+    <main style="background-color: #0F1035;">
+        <a class="help back-link" href="../index.html">&larr; Back to Blog</a>
+        <article class="article">
+
+            <h1 class="shadow-pop-bl" style="display:inline-block; padding: 0.3em 0.6em;">CRLSets and Certificate Revocation: What Browsers Actually Check</h1>
+            <p class="subtitle">Why revocation checking was abandoned online, what Chrome's CRLSets and Mozilla's CRLite do instead, and why short-lived certificates change the question.</p>
+
+            <p>A certificate is a promise that lasts until its expiry date. Sometimes you need to break that promise early: the private key leaked, the CA issued it by mistake, the domain changed hands. The mechanism for that is revocation, and it is the part of the web PKI that works the least well. This article explains why browsers stopped asking CAs about revocation in real time, what Chrome's <strong>CRLSets</strong> do in its place, and how the small internal CA I run at home sidesteps the whole problem.</p>
+
+            <h2>The two original answers, and why they failed</h2>
+            <p>The standard defines two ways to find out whether a certificate is revoked. A <strong>CRL</strong> (certificate revocation list) is a file published by the CA listing the serial numbers of revoked certificates. It is simple, but it grows with every revocation and the client has to download all of it. <strong>OCSP</strong> (Online Certificate Status Protocol) lets the client ask the CA about a single certificate, which is lighter, but it has costs of its own:</p>
+            <ul>
+                <li><strong>Latency.</strong> A blocking request to a third party before the page can load.</li>
+                <li><strong>Privacy.</strong> The CA learns which sites you visit, since you ask about each certificate.</li>
+                <li><strong>Availability.</strong> If the responder is down, what does the browser do?</li>
+            </ul>
+            <p>That last question is the one that broke it. Browsers chose <strong>soft-fail</strong>: if the revocation server does not answer, assume the certificate is fine, because otherwise a CA outage would take half the web down. But an attacker who can intercept your traffic well enough to use a stolen key can also drop the OCSP request. Soft-fail therefore protects against nothing in exactly the situation where you need it. Revocation checking that an attacker can switch off by blocking a request is, as security people say, a speed bump.</p>
+
+            <h2>CRLSets: a curated list pushed to the browser</h2>
+            <p>Chrome's answer is the <strong>CRLSet</strong>. Instead of asking a CA at connection time, Chrome receives a small list of revoked certificates through its own update channel, in the background, like any other component. The list is compact and chosen by Google: it is built from the CRLs that CAs publish, but it is deliberately <em>not</em> complete. It has a size cap of a few hundred kilobytes, so it keeps what matters most, such as revoked intermediates and entries flagged for security reasons, and drops what does not fit.</p>
+            <p>The consequences are worth spelling out:</p>
+            <ul>
+                <li><strong>No connection-time cost.</strong> The check is a local lookup against data already on your machine. No latency, nothing leaked to a CA.</li>
+                <li><strong>No soft-fail loophole.</strong> There is no server to block. The list is there or it is not.</li>
+                <li><strong>But it is partial.</strong> A revoked ordinary site certificate may simply not be in the list. CRLSets are a fast emergency brake, not a full revocation database.</li>
+                <li><strong>The freshness depends on updates.</strong> A browser that is offline or not updating components has an old list.</li>
+            </ul>
+            <p>The size problem has a history: mass revocations, the best-known being the aftermath of the Heartbleed bug in 2014, produced far more revoked certificates than a list this small could ever hold. That event is much of why people stopped believing in revocation as a safety net.</p>
+
+            <h2>CRLite and the other approach to completeness</h2>
+            <p>Mozilla went after the completeness problem instead. <strong>CRLite</strong> aggregates revocation data for the whole set of publicly logged certificates and encodes it in a data structure called a filter cascade, a stack of Bloom filters that gives exact answers for the certificates it was built from, at a size small enough to ship to every browser. The trade-off is the opposite of Chrome's: complete coverage, but it only knows certificates that appear in Certificate Transparency logs, and it is updated at the pace of the pipeline that builds it.</p>
+            <p>OCSP stapling and the "Must-Staple" extension are a third path: the server fetches a signed OCSP response itself and presents it during the handshake, so the browser does not have to contact the CA. It fixes latency and privacy, but not the soft-fail problem unless the certificate says the staple is mandatory, and few sites ask for that.</p>
+
+            <h2>The industry's real fix: make certificates expire sooner</h2>
+            <p>If revocation is unreliable, the other lever is lifetime. A certificate that expires in a week needs no revocation: by the time you notice a problem, it is already nearly gone. The CA/Browser Forum has been moving in this direction. Maximum validity dropped to 398 days years ago, and a 2025 ballot schedules a staged reduction, with a ceiling of 200 days that is already in force and further cuts planned in the following years. Automation (ACME) is what makes it possible: nobody renews 47-day certificates by hand. Some CAs now offer certificates that live for only a few days. Responders have followed: the CA/B Forum made OCSP optional and CRLs mandatory for public CAs, and Let's Encrypt has dropped OCSP in favour of CRLs.</p>
+
+            <h2>What this means for a homelab PKI</h2>
+            <p>My internal CA is a <a href="https://smallstep.com/docs/step-ca/" target="_blank">step-ca</a> instance: an offline root key, an intermediate on the server, ACME to issue certificates to Caddy. I did not build any revocation infrastructure, and I do not intend to, for three reasons:</p>
+            <ul>
+                <li><strong>Certificates last 24 hours</strong> (the policy caps them at seven days). A key stolen today stops working tomorrow, with no list to distribute and nothing for a client to check.</li>
+                <li><strong>The root has name constraints.</strong> It can only sign names under my private domain, so even a stolen intermediate cannot be used to impersonate a public site to a machine that trusts my root. That limits the damage in a way no revocation list could, because it is enforced by the client during path validation.</li>
+                <li><strong>The root key is offline.</strong> The thing worth revoking, the root, is the thing least likely to leak.</li>
+            </ul>
+            <p>It also matches how browsers treat private roots: the curated, centrally updated revocation data they ship is built for public CAs, so a certificate chaining to a root you installed yourself should not be expected to benefit from it. For a private PKI, short lifetimes are not just a convenience, they are the revocation strategy.</p>
+
+            <h2>Takeaways</h2>
+            <ul>
+                <li>Online revocation checking was abandoned because soft-fail makes it useless against an active attacker.</li>
+                <li>CRLSets give Chrome a fast, private, local emergency list, at the cost of completeness.</li>
+                <li>CRLite aims at completeness through a compact cryptographic filter; stapling shifts the work to the server.</li>
+                <li>The robust answer is shorter certificate lifetimes plus automation.</li>
+                <li>In a private PKI, combine short lifetimes, name constraints and an offline root, and revocation mostly stops being your problem.</li>
+            </ul>
+        </article>
+    </main>
+
+	<footer class="theme-dark text-center-desktop text-center-mobile">
+		<h2>Gaspard TORTERAT--SLANDA</h2>
+		<h3>Computer science enthusiast</h3>
+		<ul class="footer-links">
+			<li><a href="../../index.html"><i class="fas fa-home"></i></a></li>
+			<li><a href="../../portfolio/index.html">Portfolio</a></li>
+            <li><a href="../../contact/index.html">Contact</a></li>
+		</ul>
+		<ul class="footer-icons">
+			<li><a href="https://www.linkedin.com/in/gaspard-torterat-slanda-393046263/" target="_blank"><i class="fab fa-linkedin"></i></a></li>
+			<li><a href="https://github.com/Gaspardcode" target="_blank"><i class="fab fa-github-square"></i></a></li>
+		</ul>
+		<p class="privacy"><a href="../../privacy.html">Privacy &amp; Legal</a></p>
+	</footer>
+    <script src="../../assets/vendor/lunevedy/lunevedy.js"></script>
+
+</body>
+</html>

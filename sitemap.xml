@@ -18,6 +18,11 @@
   <priority>0.80</priority>
 </url>
 <url>
+  <loc>https://gaspardcode.github.io/blog/opencti-hash-patterns/index.html</loc>
+  <lastmod>2026-10-14T00:00:00+00:00</lastmod>
+  <priority>0.70</priority>
+</url>
+<url>
   <loc>https://gaspardcode.github.io/blog/linkedin-bots/index.html</loc>
   <lastmod>2026-07-19T00:00:00+00:00</lastmod>
   <priority>0.70</priority>
@@ -30,6 +35,16 @@
 <url>
   <loc>https://gaspardcode.github.io/blog/google-supremacy/index.html</loc>
   <lastmod>2026-07-19T00:00:00+00:00</lastmod>
+  <priority>0.70</priority>
+</url>
+<url>
+  <loc>https://gaspardcode.github.io/blog/cve-2025-22224-vmci/index.html</loc>
+  <lastmod>2026-10-19T00:00:00+00:00</lastmod>
+  <priority>0.70</priority>
+</url>
+<url>
+  <loc>https://gaspardcode.github.io/blog/cve-2020-0601-curveball/index.html</loc>
+  <lastmod>2026-10-19T00:00:00+00:00</lastmod>
   <priority>0.70</priority>
 </url>
 <url>
